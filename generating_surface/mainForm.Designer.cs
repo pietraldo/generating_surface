@@ -30,6 +30,9 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
+            trackBarAxisY = new NoFocusTrackBar();
+            txtAxisYValue = new TextBox();
+            label4 = new Label();
             button1 = new Button();
             noFocusTrackBar1 = new NoFocusTrackBar();
             textBox1 = new TextBox();
@@ -40,15 +43,12 @@
             txtAxisXValue = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            trackBarAxisY = new NoFocusTrackBar();
-            txtAxisYValue = new TextBox();
-            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarAxisY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisZ).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisX).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarAxisY).BeginInit();
             SuspendLayout();
             // 
             // canvas
@@ -60,6 +60,9 @@
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += canvas_Paint;
+            canvas.MouseDown += canvas_MouseDown;
+            canvas.MouseMove += canvas_MouseMove;
+            canvas.MouseUp += canvas_MouseUp;
             // 
             // panel1
             // 
@@ -82,6 +85,34 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 450);
             panel1.TabIndex = 1;
+            // 
+            // trackBarAxisY
+            // 
+            trackBarAxisY.Location = new Point(42, 151);
+            trackBarAxisY.Maximum = 180;
+            trackBarAxisY.Minimum = -180;
+            trackBarAxisY.Name = "trackBarAxisY";
+            trackBarAxisY.Size = new Size(104, 45);
+            trackBarAxisY.TabIndex = 14;
+            trackBarAxisY.TickStyle = TickStyle.None;
+            trackBarAxisY.Scroll += trackBarAxisY_Scroll;
+            // 
+            // txtAxisYValue
+            // 
+            txtAxisYValue.Enabled = false;
+            txtAxisYValue.Location = new Point(152, 151);
+            txtAxisYValue.Name = "txtAxisYValue";
+            txtAxisYValue.Size = new Size(39, 23);
+            txtAxisYValue.TabIndex = 13;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(9, 151);
+            label4.Name = "label4";
+            label4.Size = new Size(29, 15);
+            label4.TabIndex = 12;
+            label4.Text = "oś Y";
             // 
             // button1
             // 
@@ -174,34 +205,6 @@
             label1.TabIndex = 1;
             label1.Text = "oś X";
             // 
-            // trackBarAxisY
-            // 
-            trackBarAxisY.Location = new Point(42, 151);
-            trackBarAxisY.Maximum = 180;
-            trackBarAxisY.Minimum = -180;
-            trackBarAxisY.Name = "trackBarAxisY";
-            trackBarAxisY.Size = new Size(104, 45);
-            trackBarAxisY.TabIndex = 14;
-            trackBarAxisY.TickStyle = TickStyle.None;
-            trackBarAxisY.Scroll += trackBarAxisY_Scroll;
-            // 
-            // txtAxisYValue
-            // 
-            txtAxisYValue.Enabled = false;
-            txtAxisYValue.Location = new Point(152, 151);
-            txtAxisYValue.Name = "txtAxisYValue";
-            txtAxisYValue.Size = new Size(39, 23);
-            txtAxisYValue.TabIndex = 13;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(9, 151);
-            label4.Name = "label4";
-            label4.Size = new Size(29, 15);
-            label4.TabIndex = 12;
-            label4.Text = "oś Y";
-            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -215,10 +218,10 @@
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarAxisY).EndInit();
             ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisZ).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisX).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarAxisY).EndInit();
             ResumeLayout(false);
         }
 

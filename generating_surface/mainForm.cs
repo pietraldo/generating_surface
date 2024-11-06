@@ -14,6 +14,8 @@ namespace generating_surface
         const int canvasTop = canvasHeight / 2;
         const int canvasBottom = -canvasHeight / 2;
 
+
+
         public mainForm()
         {
             InitializeComponent();
@@ -61,9 +63,9 @@ namespace generating_surface
 
 
             BezierSurface surface = new BezierSurface();
-            float degreeX = float.Parse(txtAxisXValue.Text);
-            float degreeZ = float.Parse(txtAxisZValue.Text);
-            float degreeY = float.Parse(txtAxisYValue.Text);
+            float degreeX = trackBarAxisX.Value;
+            float degreeZ = trackBarAxisZ.Value;
+            float degreeY = trackBarAxisY.Value;
 
             if (surface.ReadPointsFromFile(surfaceFile))
             {
@@ -118,6 +120,36 @@ namespace generating_surface
 
         }
 
-        
+        Point lastMousePosition = new Point(0, 0);
+        bool mouseDrag = false;
+        private void canvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            lastMousePosition = e.Location;
+            mouseDrag = true;
+        }
+
+        private void canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDrag)
+            {
+                float dy = e.Location.X - lastMousePosition.X;
+                float dx = e.Location.Y - lastMousePosition.Y;
+
+                if (dx + trackBarAxisX.Value < trackBarAxisX.Maximum && dx + trackBarAxisX.Value > trackBarAxisX.Minimum)
+                    trackBarAxisX.Value += (int)dx;
+                if (dy + trackBarAxisY.Value < trackBarAxisY.Maximum && dy + trackBarAxisY.Value > trackBarAxisY.Minimum)
+                    trackBarAxisY.Value += (int)dy;
+
+
+                lastMousePosition = e.Location;
+
+                canvas.Invalidate();
+            }
+        }
+
+        private void canvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDrag = false;
+        }
     }
 }
