@@ -14,16 +14,30 @@ namespace generating_surface
         {
             InitializeComponent();
 
+            // Canvas
             canvas.Size = new System.Drawing.Size(canvasWidth, canvasHeight);
             canvas.Location = new Point(0, 0);
 
-            trackBar1.Minimum = canvasLeft;
-            trackBar1.Maximum = canvasRight;
+            // TrackBar
+            txtAlfaValue.Text = trackBarAlfa.Value.ToString();
+            txtBetaValue.Text = trackBarBeta.Value.ToString();
         }
 
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        public static void PutPixel(Graphics g, int x, int y, Color color)
         {
+            Brush brush = new SolidBrush(color);
+            g.FillRectangle(brush, x, y, 1, 1);
+        }
+
+        private void trackBarAlfa_Scroll(object sender, EventArgs e)
+        {
+            txtAlfaValue.Text = trackBarAlfa.Value.ToString();
+            canvas.Invalidate();
+        }
+
+        private void trackBarBeta_Scroll(object sender, EventArgs e)
+        {
+            txtBetaValue.Text = trackBarBeta.Value.ToString();
             canvas.Invalidate();
         }
 
@@ -34,14 +48,29 @@ namespace generating_surface
             g.TranslateTransform((float)canvas.Width / 2, -(float)canvas.Height / 2);
 
 
-            int red = 255;
-            int green = 100;
-            int blue = 50;
-            Color customColor = Color.FromArgb(red, green, blue);
-            Brush customBrush = new SolidBrush(customColor);
+            BezierSurface surface = new BezierSurface();
 
-            g.FillRectangle(customBrush, trackBar1.Value, 0, 2, 2);
+            if (surface.ReadPointsFromFile("surface.txt"))
+            {
+                surface.Print();
 
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        PutPixel(g, (int)surface.siatka[i, j].X, (int)surface.siatka[i, j].Y, Color.Black);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("B³¹d wczytywania pliku");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
