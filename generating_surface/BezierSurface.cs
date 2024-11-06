@@ -19,8 +19,8 @@ namespace generating_surface
 
         public bool ReadPointsFromFile(string file)
         {
-            if(!File.Exists(file)) return false;
-                
+            if (!File.Exists(file)) return false;
+
             using (StreamReader sr = new StreamReader(file))
             {
                 string? line;
@@ -28,14 +28,14 @@ namespace generating_surface
                 while ((line = sr.ReadLine()) != null)
                 {
                     string[] values = line.Split(' ');
-                    if(values.Length!=3) return false;
-                    
-                    siatka[i/4, i%4] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
-                    
+                    if (values.Length != 3) return false;
+
+                    siatka[i / 4, i % 4] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+
                     i++;
                 }
 
-                if(i!=16) return false;
+                if (i != 16) return false;
             }
 
             return true;
@@ -56,7 +56,7 @@ namespace generating_surface
 
         public static Vector3 RotateX(Vector3 v, float degree)
         {
-            Vector3 rotated= new Vector3();
+            Vector3 rotated = new Vector3();
 
             float radian = (float)(degree * Math.PI / 180);
 
@@ -67,7 +67,7 @@ namespace generating_surface
         }
         public static Vector3 RotateZ(Vector3 v, float degree)
         {
-            Vector3 rotated= new Vector3();
+            Vector3 rotated = new Vector3();
 
             float radian = (float)(degree * Math.PI / 180);
 
@@ -78,7 +78,7 @@ namespace generating_surface
         }
         public static Vector3 RotateY(Vector3 v, float degree)
         {
-            Vector3 rotated= new Vector3();
+            Vector3 rotated = new Vector3();
 
             float radian = (float)(degree * Math.PI / 180);
 
@@ -86,6 +86,34 @@ namespace generating_surface
             rotated.Y = v.Y;
             rotated.Z = (float)(-v.X * Math.Sin(radian) + v.Z * Math.Cos(radian));
             return rotated;
+        }
+
+        public Vector3 CountPoint(float u, float v)
+        {
+            Vector3 point = new Vector3(0,0,0);
+            for (int i = 0; i < 4; i++)
+            {
+                for(int j = 0; j < 4; j++)
+                {
+                    float bernsteinU = (float)Bernstein(u, i, 3);
+                    float bernsteinV = (float)Bernstein(v, j, 3);
+
+                    point.X += siatka[i, j].X * bernsteinU * bernsteinV;
+                    point.Y += siatka[i, j].Y * bernsteinU * bernsteinV;
+                    point.Z += siatka[i, j].Z * bernsteinU * bernsteinV;
+                }
+            }
+            return point;
+        }
+        public static double Bernstein(float u, int i, int m)
+        {
+            return BinominalCoefficient(m, i) * Math.Pow(u, i) * Math.Pow(1 - u, m - i);
+        }
+
+        public static int BinominalCoefficient(int n, int k)
+        {
+            if (k == 0 || k == n) return 1;
+            return BinominalCoefficient(n - 1, k - 1) + BinominalCoefficient(n - 1, k);
         }
     }
 }

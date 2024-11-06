@@ -6,8 +6,11 @@ namespace generating_surface
     public partial class mainForm : Form
     {
         const string surfaceFile = "surface.txt";
+        
         const int canvasWidth = 300;
         const int canvasHeight = 300;
+
+        const int n = 20;
 
         const int canvasRight = canvasWidth / 2;
         const int canvasLeft = -canvasWidth / 2;
@@ -69,6 +72,25 @@ namespace generating_surface
 
             if (surface.ReadPointsFromFile(surfaceFile))
             {
+                // counting points
+                Vector3[,] points = new Vector3[n, n];
+                float step = 1f / (n-1);
+
+                for(int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        points[i, j] = surface.CountPoint(i * step, j * step);
+
+                        points[i,j] = BezierSurface.RotateX(points[i, j], degreeX);
+                        points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
+                        points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
+
+                        PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, Color.Black);
+                    }
+                }
+
+                // rotating points of the main grid
                 Vector3[,] rotated = new Vector3[4, 4];
                 for (int i = 0; i < 4; i++)
                 {
@@ -80,14 +102,16 @@ namespace generating_surface
                     }
                 }
 
-                for (int i = 0; i < 4; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
-                    }
-                }
+                //// main grid
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    for (int j = 0; j < 4; j++)
+                //    {
+                //        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
+                //    }
+                //}
 
+                // main grid lines
                 for (int i = 0; i < 4; i++)
                 {
                     for (int j = 0; j < 4; j++)
@@ -111,8 +135,6 @@ namespace generating_surface
             {
                 MessageBox.Show("B³¹d wczytywania pliku");
             }
-
-
         }
 
         private void button1_Click(object sender, EventArgs e)
