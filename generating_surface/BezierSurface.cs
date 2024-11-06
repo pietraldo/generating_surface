@@ -53,5 +53,39 @@ namespace generating_surface
                 Debug.WriteLine("");
             }
         }
+
+        public static Vector3 RotateX(Vector3 v, float degree)
+        {
+            Vector3 rotated= new Vector3();
+
+            float radian = (float)(degree * Math.PI / 180);
+
+            rotated.X = v.X;
+            rotated.Y = (float)(v.Y * Math.Cos(radian) - v.Z * Math.Sin(radian));
+            rotated.Z = (float)(v.Y * Math.Sin(radian) + v.Z * Math.Cos(radian));
+            return rotated;
+        }
+        public static Vector3 RotateZ(Vector3 v, float degree)
+        {
+            Vector3 rotated= new Vector3();
+
+            float radian = (float)(degree * Math.PI / 180);
+
+            rotated.X = (float)(v.X * Math.Cos(radian) - v.Y * Math.Sin(radian));
+            rotated.Y = (float)(v.X * Math.Sin(radian) + v.Y * Math.Cos(radian));
+            rotated.Z = v.Z;
+            return rotated;
+        }
+        public static Vector3 RotateY(Vector3 v, float degree)
+        {
+            Vector3 rotated= new Vector3();
+
+            float radian = (float)(degree * Math.PI / 180);
+
+            rotated.X = (float)(v.X * Math.Cos(radian) + v.Z * Math.Sin(radian));
+            rotated.Y = v.Y;
+            rotated.Z = (float)(-v.X * Math.Sin(radian) + v.Z * Math.Cos(radian));
+            return rotated;
+        }
     }
 }

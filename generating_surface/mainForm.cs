@@ -1,7 +1,11 @@
+using System.Diagnostics;
+using System.Numerics;
+
 namespace generating_surface
 {
     public partial class mainForm : Form
     {
+        const string surfaceFile = "surface.txt";
         const int canvasWidth = 300;
         const int canvasHeight = 300;
 
@@ -19,25 +23,33 @@ namespace generating_surface
             canvas.Location = new Point(0, 0);
 
             // TrackBar
-            txtAlfaValue.Text = trackBarAlfa.Value.ToString();
-            txtBetaValue.Text = trackBarBeta.Value.ToString();
+            txtAxisXValue.Text = trackBarAxisX.Value.ToString();
+            txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
+            txtAxisYValue.Text = trackBarAxisY.Value.ToString();
+
+
         }
 
-        public static void PutPixel(Graphics g, int x, int y, Color color)
+        public static void PutPixel(Graphics g, int x, int y, Color color, int size = 1)
         {
             Brush brush = new SolidBrush(color);
-            g.FillRectangle(brush, x, y, 1, 1);
+            g.FillRectangle(brush, x - size / 2, y - size / 2, size, size);
         }
 
         private void trackBarAlfa_Scroll(object sender, EventArgs e)
         {
-            txtAlfaValue.Text = trackBarAlfa.Value.ToString();
+            txtAxisXValue.Text = trackBarAxisX.Value.ToString();
             canvas.Invalidate();
         }
 
         private void trackBarBeta_Scroll(object sender, EventArgs e)
         {
-            txtBetaValue.Text = trackBarBeta.Value.ToString();
+            txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
+            canvas.Invalidate();
+        }
+        private void trackBarAxisY_Scroll(object sender, EventArgs e)
+        {
+            txtAxisYValue.Text = trackBarAxisY.Value.ToString();
             canvas.Invalidate();
         }
 
@@ -49,16 +61,47 @@ namespace generating_surface
 
 
             BezierSurface surface = new BezierSurface();
+            float degreeX = float.Parse(txtAxisXValue.Text);
+            float degreeZ = float.Parse(txtAxisZValue.Text);
+            float degreeY = float.Parse(txtAxisYValue.Text);
 
-            if (surface.ReadPointsFromFile("surface.txt"))
+            if (surface.ReadPointsFromFile(surfaceFile))
             {
-                surface.Print();
+                Vector3[,] rotated = new Vector3[4, 4];
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        rotated[i, j] = BezierSurface.RotateX(surface.siatka[i, j], degreeX);
+                        rotated[i, j] = BezierSurface.RotateZ(rotated[i, j], degreeZ);
+                        rotated[i, j] = BezierSurface.RotateY(rotated[i, j], degreeY);
+                    }
+                }
 
                 for (int i = 0; i < 4; i++)
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        PutPixel(g, (int)surface.siatka[i, j].X, (int)surface.siatka[i, j].Y, Color.Black);
+                        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
+                    }
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        Point p1 = new Point((int)rotated[i, j].X, (int)rotated[i, j].Y);
+                        if (j + 1 < 4)
+                        {
+                            Point p2 = new Point((int)rotated[i, j + 1].X, (int)rotated[i, j + 1].Y);
+                            g.DrawLine(Pens.Black, p1, p2);
+                        }
+                        if (i + 1 < 4)
+                        {
+                            Point p3 = new Point((int)rotated[i + 1, j].X, (int)rotated[i + 1, j].Y);
+                            g.DrawLine(Pens.Black, p1, p3);
+                        }
+
                     }
                 }
             }
@@ -66,11 +109,15 @@ namespace generating_surface
             {
                 MessageBox.Show("B³¹d wczytywania pliku");
             }
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
         }
+
+        
     }
 }
