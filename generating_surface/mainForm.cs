@@ -66,25 +66,20 @@ namespace generating_surface
 
 
             BezierSurface surface = new BezierSurface();
+            if (!surface.ReadPointsFromFile(surfaceFile))
+            {
+                MessageBox.Show("B³¹d wczytywania pliku");
+                return;
+            }
 
             float degreeX = trackBarAxisX.Value;
             float degreeZ = trackBarAxisZ.Value;
             float degreeY = trackBarAxisY.Value;
 
-            if (surface.ReadPointsFromFile(surfaceFile))
-            {
+            Axis(g);
+            LittleGrid(surface, g, degreeX, degreeY, degreeZ);
+            MainGrid(surface, g, degreeX, degreeY, degreeZ);
 
-
-
-                Axis(g);
-                LittleGrid(surface, g, degreeX, degreeY, degreeZ);
-                MainGrid(surface, g, degreeX, degreeY, degreeZ);
-
-            }
-            else
-            {
-                MessageBox.Show("B³¹d wczytywania pliku");
-            }
         }
 
         private void Axis(Graphics g)
@@ -195,10 +190,7 @@ namespace generating_surface
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         Point lastMousePosition = new Point(0, 0);
         bool mouseDrag = false;
@@ -225,6 +217,11 @@ namespace generating_surface
 
                 canvas.Invalidate();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void canvas_MouseUp(object sender, MouseEventArgs e)
