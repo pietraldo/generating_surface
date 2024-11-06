@@ -10,7 +10,8 @@ namespace generating_surface
 {
     public class BezierSurface
     {
-        public Vector3[,] siatka = new Vector3[4, 4];
+        public const int size = 4;
+        public Vector3[,] siatka = new Vector3[size, size];
 
 
         public BezierSurface()
@@ -27,15 +28,17 @@ namespace generating_surface
                 int i = 0;
                 while ((line = sr.ReadLine()) != null)
                 {
+                    if (i >= size * size) return false;
+
                     string[] values = line.Split(' ');
                     if (values.Length != 3) return false;
 
-                    siatka[i / 4, i % 4] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+                    siatka[i / size, i % size] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
 
                     i++;
                 }
 
-                if (i != 16) return false;
+                if (i != size*size) return false;
             }
 
             return true;
@@ -43,9 +46,9 @@ namespace generating_surface
 
         public void Print()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < size; j++)
                 {
                     Debug.Write(siatka[i, j]);
                     Debug.Write(" ");
@@ -91,12 +94,12 @@ namespace generating_surface
         public Vector3 CountPoint(float u, float v)
         {
             Vector3 point = new Vector3(0,0,0);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < size; i++)
             {
-                for(int j = 0; j < 4; j++)
+                for(int j = 0; j < size; j++)
                 {
-                    float bernsteinU = (float)Bernstein(u, i, 3);
-                    float bernsteinV = (float)Bernstein(v, j, 3);
+                    float bernsteinU = (float)Bernstein(u, i, size -1);
+                    float bernsteinV = (float)Bernstein(v, j, size -1);
 
                     point.X += siatka[i, j].X * bernsteinU * bernsteinV;
                     point.Y += siatka[i, j].Y * bernsteinU * bernsteinV;
