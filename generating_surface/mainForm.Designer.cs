@@ -30,6 +30,9 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
+            checkBoxLittleGrid = new CheckBox();
+            checkBoxMainLines = new CheckBox();
+            checkBoxMainPoints = new CheckBox();
             trackBarAxisY = new NoFocusTrackBar();
             txtAxisYValue = new TextBox();
             label4 = new Label();
@@ -43,6 +46,7 @@
             txtAxisXValue = new TextBox();
             label2 = new Label();
             label1 = new Label();
+            checkBoxAxis = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisY).BeginInit();
@@ -67,6 +71,10 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
+            panel1.Controls.Add(checkBoxAxis);
+            panel1.Controls.Add(checkBoxLittleGrid);
+            panel1.Controls.Add(checkBoxMainLines);
+            panel1.Controls.Add(checkBoxMainPoints);
             panel1.Controls.Add(trackBarAxisY);
             panel1.Controls.Add(txtAxisYValue);
             panel1.Controls.Add(label4);
@@ -85,6 +93,41 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 450);
             panel1.TabIndex = 1;
+            // 
+            // checkBoxLittleGrid
+            // 
+            checkBoxLittleGrid.AutoSize = true;
+            checkBoxLittleGrid.Checked = true;
+            checkBoxLittleGrid.CheckState = CheckState.Checked;
+            checkBoxLittleGrid.Location = new Point(9, 302);
+            checkBoxLittleGrid.Name = "checkBoxLittleGrid";
+            checkBoxLittleGrid.Size = new Size(85, 19);
+            checkBoxLittleGrid.TabIndex = 17;
+            checkBoxLittleGrid.Text = "mała siatka";
+            checkBoxLittleGrid.UseVisualStyleBackColor = true;
+            checkBoxLittleGrid.CheckedChanged += checkBoxLittleGrid_CheckedChanged;
+            // 
+            // checkBoxMainLines
+            // 
+            checkBoxMainLines.AutoSize = true;
+            checkBoxMainLines.Location = new Point(9, 277);
+            checkBoxMainLines.Name = "checkBoxMainLines";
+            checkBoxMainLines.Size = new Size(90, 19);
+            checkBoxMainLines.TabIndex = 16;
+            checkBoxMainLines.Text = "główne linie";
+            checkBoxMainLines.UseVisualStyleBackColor = true;
+            checkBoxMainLines.CheckedChanged += checkBoxMainLines_CheckedChanged;
+            // 
+            // checkBoxMainPoints
+            // 
+            checkBoxMainPoints.AutoSize = true;
+            checkBoxMainPoints.Location = new Point(9, 252);
+            checkBoxMainPoints.Name = "checkBoxMainPoints";
+            checkBoxMainPoints.Size = new Size(105, 19);
+            checkBoxMainPoints.TabIndex = 15;
+            checkBoxMainPoints.Text = "główne punkty";
+            checkBoxMainPoints.UseVisualStyleBackColor = true;
+            checkBoxMainPoints.CheckedChanged += checkBoxMainPoints_CheckedChanged;
             // 
             // trackBarAxisY
             // 
@@ -116,7 +159,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(80, 307);
+            button1.Location = new Point(71, 415);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 11;
@@ -126,7 +169,7 @@
             // 
             // noFocusTrackBar1
             // 
-            noFocusTrackBar1.Location = new Point(42, 245);
+            noFocusTrackBar1.Location = new Point(42, 201);
             noFocusTrackBar1.Name = "noFocusTrackBar1";
             noFocusTrackBar1.Size = new Size(104, 45);
             noFocusTrackBar1.TabIndex = 10;
@@ -135,7 +178,7 @@
             // textBox1
             // 
             textBox1.Enabled = false;
-            textBox1.Location = new Point(152, 245);
+            textBox1.Location = new Point(152, 201);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(39, 23);
             textBox1.TabIndex = 9;
@@ -143,7 +186,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(9, 245);
+            label3.Location = new Point(9, 201);
             label3.Name = "label3";
             label3.Size = new Size(131, 15);
             label3.TabIndex = 8;
@@ -205,6 +248,19 @@
             label1.TabIndex = 1;
             label1.Text = "oś X";
             // 
+            // checkBoxAxis
+            // 
+            checkBoxAxis.AutoSize = true;
+            checkBoxAxis.Checked = true;
+            checkBoxAxis.CheckState = CheckState.Checked;
+            checkBoxAxis.Location = new Point(9, 327);
+            checkBoxAxis.Name = "checkBoxAxis";
+            checkBoxAxis.Size = new Size(47, 19);
+            checkBoxAxis.TabIndex = 18;
+            checkBoxAxis.Text = "osie";
+            checkBoxAxis.UseVisualStyleBackColor = true;
+            checkBoxAxis.CheckedChanged += checkBoxAxis_CheckedChanged;
+            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -243,5 +299,9 @@
         private NoFocusTrackBar trackBarAxisY;
         private TextBox txtAxisYValue;
         private Label label4;
+        private CheckBox checkBoxLittleGrid;
+        private CheckBox checkBoxMainLines;
+        private CheckBox checkBoxMainPoints;
+        private CheckBox checkBoxAxis;
     }
 }

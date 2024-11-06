@@ -6,7 +6,7 @@ namespace generating_surface
     public partial class mainForm : Form
     {
         const string surfaceFile = "surface.txt";
-        
+
         const int canvasWidth = 300;
         const int canvasHeight = 300;
 
@@ -66,7 +66,7 @@ namespace generating_surface
 
 
             BezierSurface surface = new BezierSurface();
-            
+
             float degreeX = trackBarAxisX.Value;
             float degreeZ = trackBarAxisZ.Value;
             float degreeY = trackBarAxisY.Value;
@@ -74,94 +74,125 @@ namespace generating_surface
             if (surface.ReadPointsFromFile(surfaceFile))
             {
 
-                Vector3[,] points = new Vector3[n, n];
-                float step = 1f / (n - 1);
 
-                // counting points, rotating and drawing them
-                for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        points[i, j] = surface.CountPoint(i * step, j * step);
 
-                        points[i, j] = BezierSurface.RotateX(points[i, j], degreeX);
-                        points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
-                        points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
+                Axis(g);
+                LittleGrid(surface, g, degreeX, degreeY, degreeZ);
+                MainGrid(surface, g, degreeX, degreeY, degreeZ);
 
-                        PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, Color.Black);
-                    }
-                }
-
-                // drawing lines
-                for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
-                        if (j + 1 < n)
-                        {
-                            Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
-                            g.DrawLine(Pens.Black, p1, p2);
-                        }
-                        if (i + 1 < n)
-                        {
-                            Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
-                            g.DrawLine(Pens.Black, p1, p3);
-                        }
-                        if (i + 1 < n && j + 1 < n)
-                        {
-                            Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
-                            g.DrawLine(Pens.Black, p1, p4);
-                        }
-
-                    }
-                }
-
-                ////rotating points of the main grid
-                //Vector3[,] rotated = new Vector3[BezierSurface.size, BezierSurface.size];
-                //for (int i = 0; i < BezierSurface.size; i++)
-                //{
-                //    for (int j = 0; j < BezierSurface.size; j++)
-                //    {
-                //        rotated[i, j] = BezierSurface.RotateX(surface.siatka[i, j], degreeX);
-                //        rotated[i, j] = BezierSurface.RotateZ(rotated[i, j], degreeZ);
-                //        rotated[i, j] = BezierSurface.RotateY(rotated[i, j], degreeY);
-                //    }
-                //}
-
-                //// main grid
-                //for (int i = 0; i < BezierSurface.size; i++)
-                //{
-                //    for (int j = 0; j < BezierSurface.size; j++)
-                //    {
-                //        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
-                //    }
-                //}
-
-                ////main grid lines
-                //for (int i = 0; i < BezierSurface.size; i++)
-                //{
-                //    for (int j = 0; j < BezierSurface.size; j++)
-                //    {
-                //        Point p1 = new Point((int)rotated[i, j].X, (int)rotated[i, j].Y);
-                //        if (j + 1 < BezierSurface.size)
-                //        {
-                //            Point p2 = new Point((int)rotated[i, j + 1].X, (int)rotated[i, j + 1].Y);
-                //            g.DrawLine(Pens.Black, p1, p2);
-                //        }
-                //        if (i + 1 < BezierSurface.size)
-                //        {
-                //            Point p3 = new Point((int)rotated[i + 1, j].X, (int)rotated[i + 1, j].Y);
-                //            g.DrawLine(Pens.Black, p1, p3);
-                //        }
-
-                //    }
-                //}
             }
             else
             {
                 MessageBox.Show("B³¹d wczytywania pliku");
             }
+        }
+
+        private void Axis(Graphics g)
+        {
+            if (!checkBoxAxis.Checked) return;
+            g.DrawLine(Pens.Black, 0, canvasTop, 0, canvasBottom);
+            g.DrawLine(Pens.Black, canvasLeft, 0, canvasRight, 0);
+        }
+
+        private void LittleGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
+        {
+            if (!checkBoxLittleGrid.Checked) return;
+
+            Vector3[,] points = new Vector3[n, n];
+            float step = 1f / (n - 1);
+
+            // counting points, rotating and drawing them
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    points[i, j] = surface.CountPoint(i * step, j * step);
+
+                    points[i, j] = BezierSurface.RotateX(points[i, j], degreeX);
+                    points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
+                    points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
+
+                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, Color.Black);
+                }
+            }
+
+            // drawing lines
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
+                    if (j + 1 < n)
+                    {
+                        Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
+                        g.DrawLine(Pens.Black, p1, p2);
+                    }
+                    if (i + 1 < n)
+                    {
+                        Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
+                        g.DrawLine(Pens.Black, p1, p3);
+                    }
+                    if (i + 1 < n && j + 1 < n)
+                    {
+                        Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
+                        g.DrawLine(Pens.Black, p1, p4);
+                    }
+
+                }
+            }
+        }
+
+        private void MainGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
+        {
+
+            //rotating points of the main grid
+            Vector3[,] rotated = new Vector3[BezierSurface.size, BezierSurface.size];
+            for (int i = 0; i < BezierSurface.size; i++)
+            {
+                for (int j = 0; j < BezierSurface.size; j++)
+                {
+                    rotated[i, j] = BezierSurface.RotateX(surface.siatka[i, j], degreeX);
+                    rotated[i, j] = BezierSurface.RotateZ(rotated[i, j], degreeZ);
+                    rotated[i, j] = BezierSurface.RotateY(rotated[i, j], degreeY);
+                }
+            }
+
+            // main grid
+            if (checkBoxMainPoints.Checked)
+            {
+
+                for (int i = 0; i < BezierSurface.size; i++)
+                {
+                    for (int j = 0; j < BezierSurface.size; j++)
+                    {
+                        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
+                    }
+                }
+            }
+
+            //main grid lines
+            if (checkBoxMainLines.Checked)
+            {
+                for (int i = 0; i < BezierSurface.size; i++)
+                {
+                    for (int j = 0; j < BezierSurface.size; j++)
+                    {
+                        Point p1 = new Point((int)rotated[i, j].X, (int)rotated[i, j].Y);
+                        if (j + 1 < BezierSurface.size)
+                        {
+                            Point p2 = new Point((int)rotated[i, j + 1].X, (int)rotated[i, j + 1].Y);
+                            g.DrawLine(Pens.Black, p1, p2);
+                        }
+                        if (i + 1 < BezierSurface.size)
+                        {
+                            Point p3 = new Point((int)rotated[i + 1, j].X, (int)rotated[i + 1, j].Y);
+                            g.DrawLine(Pens.Black, p1, p3);
+                        }
+
+                    }
+                }
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -199,6 +230,26 @@ namespace generating_surface
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
+        }
+
+        private void checkBoxLittleGrid_CheckedChanged(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void checkBoxMainLines_CheckedChanged(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void checkBoxMainPoints_CheckedChanged(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void checkBoxAxis_CheckedChanged(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
         }
     }
 }
