@@ -30,6 +30,17 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
+            trackBarM = new NoFocusTrackBar();
+            txtM = new TextBox();
+            label8 = new Label();
+            trackBarKs = new NoFocusTrackBar();
+            txtKs = new TextBox();
+            label7 = new Label();
+            trackBarKd = new NoFocusTrackBar();
+            txtKd = new TextBox();
+            label6 = new Label();
+            label5 = new Label();
+            checkBoxAxis = new CheckBox();
             checkBoxLittleGrid = new CheckBox();
             checkBoxMainLines = new CheckBox();
             checkBoxMainPoints = new CheckBox();
@@ -37,8 +48,8 @@
             txtAxisYValue = new TextBox();
             label4 = new Label();
             button1 = new Button();
-            noFocusTrackBar1 = new NoFocusTrackBar();
-            textBox1 = new TextBox();
+            trackBarAccuracy = new NoFocusTrackBar();
+            txtAccuracy = new TextBox();
             label3 = new Label();
             trackBarAxisZ = new NoFocusTrackBar();
             trackBarAxisX = new NoFocusTrackBar();
@@ -46,11 +57,13 @@
             txtAxisXValue = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            checkBoxAxis = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKd).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisY).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarAccuracy).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisZ).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisX).BeginInit();
             SuspendLayout();
@@ -71,6 +84,16 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
+            panel1.Controls.Add(trackBarM);
+            panel1.Controls.Add(txtM);
+            panel1.Controls.Add(label8);
+            panel1.Controls.Add(trackBarKs);
+            panel1.Controls.Add(txtKs);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(trackBarKd);
+            panel1.Controls.Add(txtKd);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(label5);
             panel1.Controls.Add(checkBoxAxis);
             panel1.Controls.Add(checkBoxLittleGrid);
             panel1.Controls.Add(checkBoxMainLines);
@@ -79,8 +102,8 @@
             panel1.Controls.Add(txtAxisYValue);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(button1);
-            panel1.Controls.Add(noFocusTrackBar1);
-            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(trackBarAccuracy);
+            panel1.Controls.Add(txtAccuracy);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(trackBarAxisZ);
             panel1.Controls.Add(trackBarAxisX);
@@ -89,10 +112,114 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(label1);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(693, 0);
+            panel1.Location = new Point(633, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(264, 450);
+            panel1.Size = new Size(264, 678);
             panel1.TabIndex = 1;
+            // 
+            // trackBarM
+            // 
+            trackBarM.Location = new Point(42, 486);
+            trackBarM.Maximum = 1000;
+            trackBarM.Minimum = 1;
+            trackBarM.Name = "trackBarM";
+            trackBarM.Size = new Size(104, 45);
+            trackBarM.TabIndex = 90;
+            trackBarM.TickStyle = TickStyle.None;
+            trackBarM.Value = 1;
+            // 
+            // txtM
+            // 
+            txtM.Enabled = false;
+            txtM.Location = new Point(152, 486);
+            txtM.Name = "txtM";
+            txtM.Size = new Size(39, 23);
+            txtM.TabIndex = 89;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(9, 486);
+            label8.Name = "label8";
+            label8.Size = new Size(18, 15);
+            label8.TabIndex = 88;
+            label8.Text = "m";
+            // 
+            // trackBarKs
+            // 
+            trackBarKs.Location = new Point(42, 445);
+            trackBarKs.Maximum = 1000;
+            trackBarKs.Name = "trackBarKs";
+            trackBarKs.Size = new Size(104, 45);
+            trackBarKs.SmallChange = 0;
+            trackBarKs.TabIndex = 87;
+            trackBarKs.TickStyle = TickStyle.None;
+            // 
+            // txtKs
+            // 
+            txtKs.Enabled = false;
+            txtKs.Location = new Point(152, 445);
+            txtKs.Name = "txtKs";
+            txtKs.Size = new Size(39, 23);
+            txtKs.TabIndex = 86;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(9, 445);
+            label7.Name = "label7";
+            label7.Size = new Size(18, 15);
+            label7.TabIndex = 85;
+            label7.Text = "ks";
+            // 
+            // trackBarKd
+            // 
+            trackBarKd.Location = new Point(42, 405);
+            trackBarKd.Maximum = 1000;
+            trackBarKd.Name = "trackBarKd";
+            trackBarKd.Size = new Size(104, 45);
+            trackBarKd.TabIndex = 84;
+            trackBarKd.TickStyle = TickStyle.None;
+            // 
+            // txtKd
+            // 
+            txtKd.Enabled = false;
+            txtKd.Location = new Point(152, 405);
+            txtKd.Name = "txtKd";
+            txtKd.Size = new Size(39, 23);
+            txtKd.TabIndex = 83;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(9, 405);
+            label6.Name = "label6";
+            label6.Size = new Size(20, 15);
+            label6.TabIndex = 82;
+            label6.Text = "kd";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            label5.Location = new Point(9, 360);
+            label5.Name = "label5";
+            label5.Size = new Size(91, 32);
+            label5.TabIndex = 81;
+            label5.Text = "Światło";
+            // 
+            // checkBoxAxis
+            // 
+            checkBoxAxis.AutoSize = true;
+            checkBoxAxis.Checked = true;
+            checkBoxAxis.CheckState = CheckState.Checked;
+            checkBoxAxis.Location = new Point(9, 327);
+            checkBoxAxis.Name = "checkBoxAxis";
+            checkBoxAxis.Size = new Size(47, 19);
+            checkBoxAxis.TabIndex = 18;
+            checkBoxAxis.Text = "osie";
+            checkBoxAxis.UseVisualStyleBackColor = true;
+            checkBoxAxis.CheckedChanged += checkBoxAxis_CheckedChanged;
             // 
             // checkBoxLittleGrid
             // 
@@ -159,7 +286,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(71, 415);
+            button1.Location = new Point(65, 643);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 11;
@@ -167,21 +294,25 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // noFocusTrackBar1
+            // trackBarAccuracy
             // 
-            noFocusTrackBar1.Location = new Point(42, 201);
-            noFocusTrackBar1.Name = "noFocusTrackBar1";
-            noFocusTrackBar1.Size = new Size(104, 45);
-            noFocusTrackBar1.TabIndex = 10;
-            noFocusTrackBar1.TickStyle = TickStyle.None;
+            trackBarAccuracy.Location = new Point(42, 201);
+            trackBarAccuracy.Maximum = 80;
+            trackBarAccuracy.Minimum = 2;
+            trackBarAccuracy.Name = "trackBarAccuracy";
+            trackBarAccuracy.Size = new Size(104, 45);
+            trackBarAccuracy.TabIndex = 80;
+            trackBarAccuracy.TickStyle = TickStyle.None;
+            trackBarAccuracy.Value = 5;
+            trackBarAccuracy.Scroll += trackBarAccuracy_Scroll;
             // 
-            // textBox1
+            // txtAccuracy
             // 
-            textBox1.Enabled = false;
-            textBox1.Location = new Point(152, 201);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(39, 23);
-            textBox1.TabIndex = 9;
+            txtAccuracy.Enabled = false;
+            txtAccuracy.Location = new Point(152, 201);
+            txtAccuracy.Name = "txtAccuracy";
+            txtAccuracy.Size = new Size(39, 23);
+            txtAccuracy.TabIndex = 9;
             // 
             // label3
             // 
@@ -248,25 +379,12 @@
             label1.TabIndex = 1;
             label1.Text = "oś X";
             // 
-            // checkBoxAxis
-            // 
-            checkBoxAxis.AutoSize = true;
-            checkBoxAxis.Checked = true;
-            checkBoxAxis.CheckState = CheckState.Checked;
-            checkBoxAxis.Location = new Point(9, 327);
-            checkBoxAxis.Name = "checkBoxAxis";
-            checkBoxAxis.Size = new Size(47, 19);
-            checkBoxAxis.TabIndex = 18;
-            checkBoxAxis.Text = "osie";
-            checkBoxAxis.UseVisualStyleBackColor = true;
-            checkBoxAxis.CheckedChanged += checkBoxAxis_CheckedChanged;
-            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(957, 450);
+            ClientSize = new Size(897, 678);
             Controls.Add(panel1);
             Controls.Add(canvas);
             Name = "mainForm";
@@ -274,8 +392,11 @@
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKd).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisY).EndInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarAccuracy).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisZ).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAxisX).EndInit();
             ResumeLayout(false);
@@ -292,8 +413,8 @@
         private TextBox txtAxisZValue;
         private NoFocusTrackBar trackBarAxisX;
         private NoFocusTrackBar trackBarAxisZ;
-        private NoFocusTrackBar noFocusTrackBar1;
-        private TextBox textBox1;
+        private NoFocusTrackBar trackBarAccuracy;
+        private TextBox txtAccuracy;
         private Label label3;
         private Button button1;
         private NoFocusTrackBar trackBarAxisY;
@@ -303,5 +424,15 @@
         private CheckBox checkBoxMainLines;
         private CheckBox checkBoxMainPoints;
         private CheckBox checkBoxAxis;
+        private NoFocusTrackBar trackBarM;
+        private TextBox txtM;
+        private Label label8;
+        private NoFocusTrackBar trackBarKs;
+        private TextBox txtKs;
+        private Label label7;
+        private NoFocusTrackBar trackBarKd;
+        private TextBox txtKd;
+        private Label label6;
+        private Label label5;
     }
 }

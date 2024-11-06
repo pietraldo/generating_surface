@@ -7,17 +7,15 @@ namespace generating_surface
     {
         const string surfaceFile = "surface.txt";
 
-        const int canvasWidth = 300;
-        const int canvasHeight = 300;
-
-        const int n = 30;
+        const int canvasWidth = 500;
+        const int canvasHeight = 500;
 
         const int canvasRight = canvasWidth / 2;
         const int canvasLeft = -canvasWidth / 2;
         const int canvasTop = canvasHeight / 2;
         const int canvasBottom = -canvasHeight / 2;
 
-
+        int n = 30;
 
         public mainForm()
         {
@@ -31,7 +29,7 @@ namespace generating_surface
             txtAxisXValue.Text = trackBarAxisX.Value.ToString();
             txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
             txtAxisYValue.Text = trackBarAxisY.Value.ToString();
-
+            txtAccuracy.Text = trackBarAccuracy.Value.ToString();
 
         }
 
@@ -41,22 +39,7 @@ namespace generating_surface
             g.FillRectangle(brush, x - size / 2, y - size / 2, size, size);
         }
 
-        private void trackBarAlfa_Scroll(object sender, EventArgs e)
-        {
-            txtAxisXValue.Text = trackBarAxisX.Value.ToString();
-            canvas.Invalidate();
-        }
-
-        private void trackBarBeta_Scroll(object sender, EventArgs e)
-        {
-            txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
-            canvas.Invalidate();
-        }
-        private void trackBarAxisY_Scroll(object sender, EventArgs e)
-        {
-            txtAxisYValue.Text = trackBarAxisY.Value.ToString();
-            canvas.Invalidate();
-        }
+        
 
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
@@ -75,6 +58,7 @@ namespace generating_surface
             float degreeX = trackBarAxisX.Value;
             float degreeZ = trackBarAxisZ.Value;
             float degreeY = trackBarAxisY.Value;
+            n = trackBarAccuracy.Value;
 
             Axis(g);
             LittleGrid(surface, g, degreeX, degreeY, degreeZ);
@@ -224,6 +208,23 @@ namespace generating_surface
 
         }
 
+        private void trackBarAlfa_Scroll(object sender, EventArgs e)
+        {
+            txtAxisXValue.Text = trackBarAxisX.Value.ToString();
+            canvas.Invalidate();
+        }
+
+        private void trackBarBeta_Scroll(object sender, EventArgs e)
+        {
+            txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
+            canvas.Invalidate();
+        }
+        private void trackBarAxisY_Scroll(object sender, EventArgs e)
+        {
+            txtAxisYValue.Text = trackBarAxisY.Value.ToString();
+            canvas.Invalidate();
+        }
+
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
@@ -246,6 +247,12 @@ namespace generating_surface
 
         private void checkBoxAxis_CheckedChanged(object sender, EventArgs e)
         {
+            canvas.Invalidate();
+        }
+
+        private void trackBarAccuracy_Scroll(object sender, EventArgs e)
+        {
+            txtAccuracy.Text = trackBarAccuracy.Value.ToString();
             canvas.Invalidate();
         }
     }
