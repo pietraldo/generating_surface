@@ -62,9 +62,11 @@ namespace generating_surface
             n = trackBarAccuracy.Value;
 
             Axis(g);
-            
-            Vector3[,] rotated=MainGrid(surface, g, degreeX, degreeY, degreeZ);
+            Vector3[,] rotated = MainGrid(surface, g, degreeX, degreeY, degreeZ);
             LittleGrid(surface, rotated, g, degreeX, degreeY, degreeZ);
+
+            Vector3 sun = GetSunPossition();
+            g.FillRectangle(Brushes.Yellow, sun.X, sun.Y, 10, 10);
         }
 
         private void Axis(Graphics g)
@@ -95,7 +97,7 @@ namespace generating_surface
                     points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
                     points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
 
-                    Color color = CalculateColor(u, v, rotated);
+                    Color color = CalculateColor(u, v, rotated, points[i, j]);
 
                     PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 10);
                 }
@@ -277,9 +279,9 @@ namespace generating_surface
             }
         }
 
-        private Color CalculateColor(float u, float v, Vector3[,] surface)
+        private Color CalculateColor(float u, float v, Vector3[,] surface, Vector3 pointPosition)
         {
-            Vector3 L = SetSun();
+            Vector3 L = Vector3.Normalize(pointPosition - GetSunPossition());
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
             Vector3 R = FillingTriangle.CalculateR(N, L);
             Vector3 V = new Vector3(0, 0, 1);
@@ -296,15 +298,17 @@ namespace generating_surface
 
         Point lastMousePosition = new Point(0, 0);
         bool mouseDrag = false;
+        bool sun = false;
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             lastMousePosition = e.Location;
             mouseDrag = true;
+            sun=e.Button == MouseButtons.Right;
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDrag)
+            if (mouseDrag && !sun)
             {
                 float dy = e.Location.X - lastMousePosition.X;
                 float dx = e.Location.Y - lastMousePosition.Y;
@@ -319,6 +323,19 @@ namespace generating_surface
 
                 canvas.Invalidate();
             }
+            else if(mouseDrag)
+            {
+
+                noFocusTrackBar1.Value = e.Location.X-canvasWidth/2+500;
+                noFocusTrackBar2.Value = -e.Location.Y+canvasHeight/2+500;
+                lastMousePosition = e.Location;
+                canvas.Invalidate();
+            }
+        }
+
+        private void canvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDrag = false;
         }
 
         private void trackBarAlfa_Scroll(object sender, EventArgs e)
@@ -338,10 +355,7 @@ namespace generating_surface
             canvas.Invalidate();
         }
 
-        private void canvas_MouseUp(object sender, MouseEventArgs e)
-        {
-            mouseDrag = false;
-        }
+        
 
         private void checkBoxLittleGrid_CheckedChanged(object sender, EventArgs e)
         {
@@ -390,28 +404,29 @@ namespace generating_surface
             canvas.Invalidate();
         }
 
-        Vector3 takeFromScroll = new Vector3(0, 0, 1);
         private void noFocusTrackBar1_Scroll(object sender, EventArgs e)
         {
-            SetSun();
             canvas.Invalidate();
         }
 
         private void noFocusTrackBar3_Scroll(object sender, EventArgs e)
         {
-            SetSun();
             canvas.Invalidate();
         }
 
         private void noFocusTrackBar2_Scroll(object sender, EventArgs e)
         {
-            SetSun();
             canvas.Invalidate();
         }
 
-        private Vector3 SetSun()
+        private Vector3 GetSunPossition()
         {
-            return Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
+            return new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500);
+        }
+
+        private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

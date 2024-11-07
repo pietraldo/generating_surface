@@ -136,7 +136,7 @@
             noFocusTrackBar3.Size = new Size(104, 45);
             noFocusTrackBar3.TabIndex = 93;
             noFocusTrackBar3.TickStyle = TickStyle.None;
-            noFocusTrackBar3.Value = 1;
+            noFocusTrackBar3.Value = 500;
             noFocusTrackBar3.Scroll += noFocusTrackBar3_Scroll;
             // 
             // noFocusTrackBar2
@@ -148,7 +148,7 @@
             noFocusTrackBar2.Size = new Size(104, 45);
             noFocusTrackBar2.TabIndex = 92;
             noFocusTrackBar2.TickStyle = TickStyle.None;
-            noFocusTrackBar2.Value = 1;
+            noFocusTrackBar2.Value = 500;
             noFocusTrackBar2.Scroll += noFocusTrackBar2_Scroll;
             // 
             // noFocusTrackBar1
@@ -160,7 +160,7 @@
             noFocusTrackBar1.Size = new Size(104, 45);
             noFocusTrackBar1.TabIndex = 91;
             noFocusTrackBar1.TickStyle = TickStyle.None;
-            noFocusTrackBar1.Value = 1;
+            noFocusTrackBar1.Value = 500;
             noFocusTrackBar1.Scroll += noFocusTrackBar1_Scroll;
             // 
             // trackBarM
