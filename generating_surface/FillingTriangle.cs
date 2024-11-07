@@ -12,7 +12,7 @@ namespace generating_surface
     {
        
 
-        public static Vector3 CalculatePu(float u, float v, BezierSurface surface)
+        public static Vector3 CalculatePu(float u, float v, Vector3[,] surface)
         {
             Vector3 Pu = new Vector3();
 
@@ -26,9 +26,9 @@ namespace generating_surface
                 {
                     float bersteinU = (float)BezierSurface.Bernstein(u, i, n - 2);
                     float bersteinV = (float)BezierSurface.Bernstein(v, j, m - 1);
-                    Pu.X += (surface.siatka[i + 1, j].X - surface.siatka[i, j].X) * bersteinU * bersteinV;
-                    Pu.Y += (surface.siatka[i + 1, j].Y - surface.siatka[i, j].Y) * bersteinU * bersteinV;
-                    Pu.Z += (surface.siatka[i + 1, j].Z - surface.siatka[i, j].Z) * bersteinU * bersteinV;
+                    Pu.X += (surface[i + 1, j].X - surface[i, j].X) * bersteinU * bersteinV;
+                    Pu.Y += (surface[i + 1, j].Y - surface[i, j].Y) * bersteinU * bersteinV;
+                    Pu.Z += (surface[i + 1, j].Z - surface[i, j].Z) * bersteinU * bersteinV;
                 }
             }
 
@@ -39,7 +39,7 @@ namespace generating_surface
             return Pu;
         }
 
-        public static Vector3 CalculatePv(float u, float v, BezierSurface surface)
+        public static Vector3 CalculatePv(float u, float v, Vector3[,] surface)
         {
             Vector3 Pv = new Vector3();
 
@@ -53,9 +53,9 @@ namespace generating_surface
                 {
                     float bersteinU = (float)BezierSurface.Bernstein(u, i, n - 1);
                     float bersteinV = (float)BezierSurface.Bernstein(v, j, m - 2);
-                    Pv.X += (surface.siatka[i, j + 1].X - surface.siatka[i, j].X) * bersteinU * bersteinV;
-                    Pv.Y += (surface.siatka[i, j + 1].Y - surface.siatka[i, j].Y) * bersteinU * bersteinV;
-                    Pv.Z += (surface.siatka[i, j + 1].Z - surface.siatka[i, j].Z) * bersteinU * bersteinV;
+                    Pv.X += (surface[i, j + 1].X - surface[i, j].X) * bersteinU * bersteinV;
+                    Pv.Y += (surface[i, j + 1].Y - surface[i, j].Y) * bersteinU * bersteinV;
+                    Pv.Z += (surface[i, j + 1].Z - surface[i, j].Z) * bersteinU * bersteinV;
                 }
             }
 
@@ -66,7 +66,7 @@ namespace generating_surface
             return Pv;
         }
 
-        public static Vector3 CalculateN(float u, float v, BezierSurface surface)
+        public static Vector3 CalculateN(float u, float v, Vector3[,] surface)
         {
             Vector3 Pu = CalculatePu(u, v, surface);
             Vector3 Pv = CalculatePv(u, v, surface);

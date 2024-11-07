@@ -62,9 +62,9 @@ namespace generating_surface
             n = trackBarAccuracy.Value;
 
             Axis(g);
-            LittleGrid(surface, g, degreeX, degreeY, degreeZ);
-            MainGrid(surface, g, degreeX, degreeY, degreeZ);
-
+            
+            Vector3[,] rotated=MainGrid(surface, g, degreeX, degreeY, degreeZ);
+            LittleGrid(surface, rotated, g, degreeX, degreeY, degreeZ);
         }
 
         private void Axis(Graphics g)
@@ -74,7 +74,7 @@ namespace generating_surface
             g.DrawLine(Pens.Black, canvasLeft, 0, canvasRight, 0);
         }
 
-        private void LittleGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
+        private void LittleGrid(BezierSurface surface, Vector3[,] rotated, Graphics g, float degreeX, float degreeY, float degreeZ)
         {
             if (!checkBoxLittleGrid.Checked) return;
 
@@ -95,7 +95,7 @@ namespace generating_surface
                     points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
                     points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
 
-                    Color color = CalculateColor(u, v, surface);
+                    Color color = CalculateColor(u, v, rotated);
 
                     PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 10);
                 }
@@ -142,7 +142,7 @@ namespace generating_surface
 
         }
 
-        private void MainGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
+        private Vector3[,] MainGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
         {
 
             //rotating points of the main grid
@@ -192,7 +192,7 @@ namespace generating_surface
                     }
                 }
             }
-
+            return rotated;
         }
 
         private class Edge
@@ -261,10 +261,10 @@ namespace generating_surface
                     int x2 = (int)aet[i + 1].xMin;
                     for (int j = x1; j < x2; j++)
                     {
-                        float u = 2;
-                        float v = 2;
-                        color = CalculateColor(u, v, surface);
-                        PutPixel(g, j, scanLine, color);
+                        //float u = 2;
+                        //float v = 2;
+                        //color = CalculateColor(u, v, surface);
+                        PutPixel(g, j, scanLine, Color.LightBlue);
                     }
                 }
 
@@ -277,7 +277,7 @@ namespace generating_surface
             }
         }
 
-        private Color CalculateColor(float u, float v, BezierSurface surface)
+        private Color CalculateColor(float u, float v, Vector3[,] surface)
         {
             Vector3 L = SetSun();
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
