@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -119,6 +120,21 @@ namespace generating_surface
 
                 }
             }
+            
+            // filling triangles
+            for (int i = 0; i < n-1; i++)
+            {
+                for (int j = 0; j < n-1; j++)
+                {
+                    Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
+                    Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
+                    Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
+                    Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
+                    FillTriangle(g, p1, p2, p4, Color.Yellow);
+                    FillTriangle(g, p1, p3, p4, Color.Yellow);
+                }
+            }
+
         }
 
         private void MainGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
@@ -174,7 +190,89 @@ namespace generating_surface
 
         }
 
+        private class Edge
+        {
+            public int yMax;
+            public double xMin;
+            public double m;
+            public int index;
+        }
+        
+        private void FillTriangle(Graphics g, Point p1, Point p2, Point p3, Color color)
+        {
+            Point[] points = { p1, p2, p3 };
+            Array.Sort(points, (a, b) => a.Y.CompareTo(b.Y));
 
+            int ymin = points[0].Y;
+            int ymax = points[2].Y;
+            
+            int scanLine = ymin;
+            List<Edge> aet= new List<Edge>();
+
+            while(scanLine <= ymax)
+            {
+                for(int i=0; i<points.Length; i++)
+                {
+                    
+                    if (points[i].Y==scanLine-1)
+                    {
+                        int prevI = (i + 2) % 3;
+                        int nextI = (i + 1) % 3;
+                        Point prev = points[prevI];
+                        Point next = points[nextI];
+
+                        if (prev.Y >= points[i].Y)
+                        {
+                            Edge edge = new Edge();
+                            edge.yMax = prev.Y;
+                            edge.xMin = points[i].X;
+                            if (next.Y == points[i].Y)
+                                edge.m = 0;
+                            else
+                                edge.m = (float)(next.X - points[i].X) / (next.Y - points[i].Y);
+                            edge.index = prevI + nextI;
+                            aet.Add(edge);
+                        }
+                        else
+                        {
+                            aet.RemoveAll(x=>x.index == prevI+nextI);
+                        }
+
+                        if(next.Y >= points[i].Y)
+                        {
+                            Edge edge = new Edge();
+                            edge.yMax = next.Y;
+                            edge.xMin = points[i].X;
+                            if (prev.Y == points[i].Y)
+                                edge.m = 0;
+                            else
+                                edge.m = (float)(prev.X - points[i].X) / (prev.Y - points[i].Y);
+                            edge.index = prevI + nextI;
+                            aet.Add(edge);
+                        }
+                        else
+                        {
+                            aet.RemoveAll(x => x.index == prevI + nextI);
+                        }
+                    }
+                }
+
+                aet.Sort((a, b) => a.xMin.CompareTo(b.xMin));
+                for (int i = 0; i < aet.Count-1; i += 2)
+                {
+                    int x1 = (int)aet[i].xMin;
+                    int x2 = (int)aet[i + 1].xMin;
+                    g.DrawLine(new Pen(color), x1, scanLine, x2, scanLine);
+                }
+
+                for (int i = 0; i < aet.Count; i++)
+                {
+                    aet[i].xMin += aet[i].m;
+                }
+
+                scanLine++;
+            }
+        }
 
         Point lastMousePosition = new Point(0, 0);
         bool mouseDrag = false;
