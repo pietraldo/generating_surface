@@ -131,7 +131,7 @@ namespace generating_surface
                     Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
                     Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
                     FillTriangle(g, p1, p2, p4, Color.Yellow);
-                    FillTriangle(g, p1, p3, p4, Color.Yellow);
+                    FillTriangle(g, p1, p3, p4, Color.Black);
                 }
             }
 
@@ -197,72 +197,71 @@ namespace generating_surface
             public double m;
             public int index;
         }
-        
+
         private void FillTriangle(Graphics g, Point p1, Point p2, Point p3, Color color)
         {
+            // Sort points by Y coordinate in ascending order
             Point[] points = { p1, p2, p3 };
             Array.Sort(points, (a, b) => a.Y.CompareTo(b.Y));
 
             int ymin = points[0].Y;
             int ymax = points[2].Y;
-            
             int scanLine = ymin;
-            List<Edge> aet= new List<Edge>();
 
-            while(scanLine <= ymax)
+            List<Edge> aet = new List<Edge>();
+
+            while (scanLine <= ymax)
             {
-                for(int i=0; i<points.Length; i++)
+                for (int i = 0; i < points.Length; i++)
                 {
-                    
-                    if (points[i].Y==scanLine-1)
+                    int prevI = (i + 2) % 3;
+                    int nextI = (i + 1) % 3;
+                    Point curr = points[i];
+                    Point prev = points[prevI];
+                    Point next = points[nextI];
+
+                    if (curr.Y == scanLine)
                     {
-                        int prevI = (i + 2) % 3;
-                        int nextI = (i + 1) % 3;
-                        Point prev = points[prevI];
-                        Point next = points[nextI];
-
-                        if (prev.Y >= points[i].Y)
+                        if (prev.Y > curr.Y)
                         {
-                            Edge edge = new Edge();
-                            edge.yMax = prev.Y;
-                            edge.xMin = points[i].X;
-                            if (next.Y == points[i].Y)
-                                edge.m = 0;
-                            else
-                                edge.m = (float)(next.X - points[i].X) / (next.Y - points[i].Y);
-                            edge.index = prevI + nextI;
-                            aet.Add(edge);
-                        }
-                        else
-                        {
-                            aet.RemoveAll(x=>x.index == prevI+nextI);
+                            aet.Add(new Edge
+                            {
+                                yMax = prev.Y,
+                                xMin = curr.X,
+                                m = (prev.Y == curr.Y) ? 0 : (float)(prev.X - curr.X) / (prev.Y - curr.Y),
+                                index = i
+                            });
                         }
 
-                        if(next.Y >= points[i].Y)
+                        if (next.Y > curr.Y)
                         {
-                            Edge edge = new Edge();
-                            edge.yMax = next.Y;
-                            edge.xMin = points[i].X;
-                            if (prev.Y == points[i].Y)
-                                edge.m = 0;
-                            else
-                                edge.m = (float)(prev.X - points[i].X) / (prev.Y - points[i].Y);
-                            edge.index = prevI + nextI;
-                            aet.Add(edge);
-                        }
-                        else
-                        {
-                            aet.RemoveAll(x => x.index == prevI + nextI);
+                            aet.Add(new Edge
+                            {
+                                yMax = next.Y,
+                                xMin = curr.X,
+                                m = (next.Y == curr.Y) ? 0 : (float)(next.X - curr.X) / (next.Y - curr.Y),
+                                index = i
+                            });
                         }
                     }
                 }
 
+                aet.RemoveAll(edge => edge.yMax <= scanLine);
+
                 aet.Sort((a, b) => a.xMin.CompareTo(b.xMin));
-                for (int i = 0; i < aet.Count-1; i += 2)
+
+                for (int i = 0; i < aet.Count - 1; i += 2)
                 {
                     int x1 = (int)aet[i].xMin;
                     int x2 = (int)aet[i + 1].xMin;
-                    g.DrawLine(new Pen(color), x1, scanLine, x2, scanLine);
+                    for(int j=x1; j < x2; j++)
+                    {
+                        int red = color.R;
+                        int green = new Random().Next(256);
+                        int blue = 50;
+                        Color customColor = Color.FromArgb(red, green, blue);
+                        PutPixel(g, j, scanLine, customColor);
+                    }
                 }
 
                 for (int i = 0; i < aet.Count; i++)
@@ -273,6 +272,7 @@ namespace generating_surface
                 scanLine++;
             }
         }
+
 
         Point lastMousePosition = new Point(0, 0);
         bool mouseDrag = false;
