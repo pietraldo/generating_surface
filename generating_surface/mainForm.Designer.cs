@@ -30,6 +30,9 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
+            noFocusTrackBar3 = new NoFocusTrackBar();
+            noFocusTrackBar2 = new NoFocusTrackBar();
+            noFocusTrackBar1 = new NoFocusTrackBar();
             trackBarM = new NoFocusTrackBar();
             txtM = new TextBox();
             label8 = new Label();
@@ -47,7 +50,7 @@
             trackBarAxisY = new NoFocusTrackBar();
             txtAxisYValue = new TextBox();
             label4 = new Label();
-            button1 = new Button();
+            btnColor = new Button();
             trackBarAccuracy = new NoFocusTrackBar();
             txtAccuracy = new TextBox();
             label3 = new Label();
@@ -57,8 +60,12 @@
             txtAxisXValue = new TextBox();
             label2 = new Label();
             label1 = new Label();
+            colorDialog1 = new ColorDialog();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKd).BeginInit();
@@ -84,6 +91,9 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
+            panel1.Controls.Add(noFocusTrackBar3);
+            panel1.Controls.Add(noFocusTrackBar2);
+            panel1.Controls.Add(noFocusTrackBar1);
             panel1.Controls.Add(trackBarM);
             panel1.Controls.Add(txtM);
             panel1.Controls.Add(label8);
@@ -101,7 +111,7 @@
             panel1.Controls.Add(trackBarAxisY);
             panel1.Controls.Add(txtAxisYValue);
             panel1.Controls.Add(label4);
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(btnColor);
             panel1.Controls.Add(trackBarAccuracy);
             panel1.Controls.Add(txtAccuracy);
             panel1.Controls.Add(label3);
@@ -117,6 +127,42 @@
             panel1.Size = new Size(264, 678);
             panel1.TabIndex = 1;
             // 
+            // noFocusTrackBar3
+            // 
+            noFocusTrackBar3.Location = new Point(10, 621);
+            noFocusTrackBar3.Maximum = 1000;
+            noFocusTrackBar3.Minimum = 1;
+            noFocusTrackBar3.Name = "noFocusTrackBar3";
+            noFocusTrackBar3.Size = new Size(104, 45);
+            noFocusTrackBar3.TabIndex = 93;
+            noFocusTrackBar3.TickStyle = TickStyle.None;
+            noFocusTrackBar3.Value = 1;
+            noFocusTrackBar3.Scroll += noFocusTrackBar3_Scroll;
+            // 
+            // noFocusTrackBar2
+            // 
+            noFocusTrackBar2.Location = new Point(133, 621);
+            noFocusTrackBar2.Maximum = 1000;
+            noFocusTrackBar2.Minimum = 1;
+            noFocusTrackBar2.Name = "noFocusTrackBar2";
+            noFocusTrackBar2.Size = new Size(104, 45);
+            noFocusTrackBar2.TabIndex = 92;
+            noFocusTrackBar2.TickStyle = TickStyle.None;
+            noFocusTrackBar2.Value = 1;
+            noFocusTrackBar2.Scroll += noFocusTrackBar2_Scroll;
+            // 
+            // noFocusTrackBar1
+            // 
+            noFocusTrackBar1.Location = new Point(61, 585);
+            noFocusTrackBar1.Maximum = 1000;
+            noFocusTrackBar1.Minimum = 1;
+            noFocusTrackBar1.Name = "noFocusTrackBar1";
+            noFocusTrackBar1.Size = new Size(104, 45);
+            noFocusTrackBar1.TabIndex = 91;
+            noFocusTrackBar1.TickStyle = TickStyle.None;
+            noFocusTrackBar1.Value = 1;
+            noFocusTrackBar1.Scroll += noFocusTrackBar1_Scroll;
+            // 
             // trackBarM
             // 
             trackBarM.Location = new Point(42, 486);
@@ -127,6 +173,7 @@
             trackBarM.TabIndex = 90;
             trackBarM.TickStyle = TickStyle.None;
             trackBarM.Value = 1;
+            trackBarM.Scroll += trackBarM_Scroll;
             // 
             // txtM
             // 
@@ -154,6 +201,7 @@
             trackBarKs.SmallChange = 0;
             trackBarKs.TabIndex = 87;
             trackBarKs.TickStyle = TickStyle.None;
+            trackBarKs.Scroll += trackBarKs_Scroll;
             // 
             // txtKs
             // 
@@ -180,6 +228,7 @@
             trackBarKd.Size = new Size(104, 45);
             trackBarKd.TabIndex = 84;
             trackBarKd.TickStyle = TickStyle.None;
+            trackBarKd.Scroll += trackBarKd_Scroll;
             // 
             // txtKd
             // 
@@ -284,15 +333,15 @@
             label4.TabIndex = 12;
             label4.Text = "oś Y";
             // 
-            // button1
+            // btnColor
             // 
-            button1.Location = new Point(65, 643);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 11;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnColor.Location = new Point(9, 537);
+            btnColor.Name = "btnColor";
+            btnColor.Size = new Size(182, 23);
+            btnColor.TabIndex = 11;
+            btnColor.Text = "Wybierz kolor światła";
+            btnColor.UseVisualStyleBackColor = true;
+            btnColor.Click += btnColor_Click;
             // 
             // trackBarAccuracy
             // 
@@ -392,6 +441,9 @@
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKd).EndInit();
@@ -416,7 +468,7 @@
         private NoFocusTrackBar trackBarAccuracy;
         private TextBox txtAccuracy;
         private Label label3;
-        private Button button1;
+        private Button btnColor;
         private NoFocusTrackBar trackBarAxisY;
         private TextBox txtAxisYValue;
         private Label label4;
@@ -434,5 +486,9 @@
         private TextBox txtKd;
         private Label label6;
         private Label label5;
+        private ColorDialog colorDialog1;
+        private NoFocusTrackBar noFocusTrackBar1;
+        private NoFocusTrackBar noFocusTrackBar3;
+        private NoFocusTrackBar noFocusTrackBar2;
     }
 }

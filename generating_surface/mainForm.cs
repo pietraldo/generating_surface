@@ -40,7 +40,7 @@ namespace generating_surface
             g.FillRectangle(brush, x - size / 2, y - size / 2, size, size);
         }
 
-        
+
 
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
@@ -88,52 +88,57 @@ namespace generating_surface
                 {
                     points[i, j] = surface.CountPoint(i * step, j * step);
 
+                    float u = i * step;
+                    float v = j * step;
+
                     points[i, j] = BezierSurface.RotateX(points[i, j], degreeX);
                     points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
                     points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
 
-                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, Color.Black);
+                    Color color = CalculateColor(u, v, surface);
+
+                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 3);
                 }
             }
 
             // drawing lines
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
-                    if (j + 1 < n)
-                    {
-                        Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
-                        g.DrawLine(Pens.Black, p1, p2);
-                    }
-                    if (i + 1 < n)
-                    {
-                        Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
-                        g.DrawLine(Pens.Black, p1, p3);
-                    }
-                    if (i + 1 < n && j + 1 < n)
-                    {
-                        Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
-                        g.DrawLine(Pens.Black, p1, p4);
-                    }
+            //for (int i = 0; i < n; i++)
+            //{
+            //    for (int j = 0; j < n; j++)
+            //    {
+            //        Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
+            //        if (j + 1 < n)
+            //        {
+            //            Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
+            //            g.DrawLine(Pens.Black, p1, p2);
+            //        }
+            //        if (i + 1 < n)
+            //        {
+            //            Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
+            //            g.DrawLine(Pens.Black, p1, p3);
+            //        }
+            //        if (i + 1 < n && j + 1 < n)
+            //        {
+            //            Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
+            //            g.DrawLine(Pens.Black, p1, p4);
+            //        }
 
-                }
-            }
-            
-            // filling triangles
-            for (int i = 0; i < n-1; i++)
-            {
-                for (int j = 0; j < n-1; j++)
-                {
-                    Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
-                    Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
-                    Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
-                    Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
-                    FillTriangle(g, p1, p2, p4, Color.Yellow);
-                    FillTriangle(g, p1, p3, p4, Color.Black);
-                }
-            }
+            //    }
+            //}
+
+            //// filling triangles
+            //for (int i = 0; i < n - 1; i++)
+            //{
+            //    for (int j = 0; j < n - 1; j++)
+            //    {
+            //        Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
+            //        Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
+            //        Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
+            //        Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
+            //        FillTriangle(g, p1, p2, p4, Color.Yellow, surface);
+            //        FillTriangle(g, p1, p3, p4, Color.Black, surface);
+            //    }
+            //}
 
         }
 
@@ -198,7 +203,7 @@ namespace generating_surface
             public int index;
         }
 
-        private void FillTriangle(Graphics g, Point p1, Point p2, Point p3, Color color)
+        private void FillTriangle(Graphics g, Point p1, Point p2, Point p3, Color color, BezierSurface surface)
         {
             // Sort points by Y coordinate in ascending order
             Point[] points = { p1, p2, p3 };
@@ -254,13 +259,12 @@ namespace generating_surface
                 {
                     int x1 = (int)aet[i].xMin;
                     int x2 = (int)aet[i + 1].xMin;
-                    for(int j=x1; j < x2; j++)
+                    for (int j = x1; j < x2; j++)
                     {
-                        int red = color.R;
-                        int green = new Random().Next(256);
-                        int blue = 50;
-                        Color customColor = Color.FromArgb(red, green, blue);
-                        PutPixel(g, j, scanLine, customColor);
+                        float u = 2;
+                        float v = 2;
+                        color = CalculateColor(u, v, surface);
+                        PutPixel(g, j, scanLine, color);
                     }
                 }
 
@@ -271,6 +275,25 @@ namespace generating_surface
 
                 scanLine++;
             }
+        }
+
+        private Color CalculateColor(float u, float v, BezierSurface surface)
+        {
+            Vector3 L = takeFromScroll;
+            Vector3 N = FillingTriangle.CalculateN(u, v, surface);
+            Vector3 R = FillingTriangle.CalculateR(N, L);
+            Vector3 V = new Vector3(0, 0, 1);
+            Color IL = Color.White;
+            Color IO = Color.GreenYellow;
+            double kd = (double)trackBarKd.Value / 1000;
+            double ks = (double)trackBarKs.Value / 1000;
+            int m = trackBarM.Value;
+            //Debug.WriteLine(kd);
+            //Debug.WriteLine(m);
+            //Debug.WriteLine(ks);
+
+
+            return FillingTriangle.CalculateColor(N, L, V, R, IL, IO, kd, ks, m);
         }
 
 
@@ -299,11 +322,6 @@ namespace generating_surface
 
                 canvas.Invalidate();
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void trackBarAlfa_Scroll(object sender, EventArgs e)
@@ -351,6 +369,46 @@ namespace generating_surface
         private void trackBarAccuracy_Scroll(object sender, EventArgs e)
         {
             txtAccuracy.Text = trackBarAccuracy.Value.ToString();
+            canvas.Invalidate();
+        }
+
+        private void btnColor_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            btnColor.BackColor = colorDialog1.Color;
+        }
+
+        private void trackBarKd_Scroll(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void trackBarKs_Scroll(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void trackBarM_Scroll(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        Vector3 takeFromScroll = new Vector3(0, 0, 1);
+        private void noFocusTrackBar1_Scroll(object sender, EventArgs e)
+        {
+            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
+            canvas.Invalidate();
+        }
+
+        private void noFocusTrackBar3_Scroll(object sender, EventArgs e)
+        {
+            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
+            canvas.Invalidate();
+        }
+
+        private void noFocusTrackBar2_Scroll(object sender, EventArgs e)
+        {
+            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value-500, noFocusTrackBar2.Value-500, noFocusTrackBar3.Value - 500));
             canvas.Invalidate();
         }
     }
