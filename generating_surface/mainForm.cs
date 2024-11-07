@@ -97,7 +97,7 @@ namespace generating_surface
 
                     Color color = CalculateColor(u, v, surface);
 
-                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 3);
+                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 10);
                 }
             }
 
@@ -279,18 +279,15 @@ namespace generating_surface
 
         private Color CalculateColor(float u, float v, BezierSurface surface)
         {
-            Vector3 L = takeFromScroll;
+            Vector3 L = SetSun();
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
             Vector3 R = FillingTriangle.CalculateR(N, L);
             Vector3 V = new Vector3(0, 0, 1);
             Color IL = Color.White;
-            Color IO = Color.GreenYellow;
+            Color IO = Color.LightBlue;
             double kd = (double)trackBarKd.Value / 1000;
             double ks = (double)trackBarKs.Value / 1000;
             int m = trackBarM.Value;
-            //Debug.WriteLine(kd);
-            //Debug.WriteLine(m);
-            //Debug.WriteLine(ks);
 
 
             return FillingTriangle.CalculateColor(N, L, V, R, IL, IO, kd, ks, m);
@@ -396,20 +393,25 @@ namespace generating_surface
         Vector3 takeFromScroll = new Vector3(0, 0, 1);
         private void noFocusTrackBar1_Scroll(object sender, EventArgs e)
         {
-            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
+            SetSun();
             canvas.Invalidate();
         }
 
         private void noFocusTrackBar3_Scroll(object sender, EventArgs e)
         {
-            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
+            SetSun();
             canvas.Invalidate();
         }
 
         private void noFocusTrackBar2_Scroll(object sender, EventArgs e)
         {
-            takeFromScroll = Vector3.Normalize(new Vector3(noFocusTrackBar1.Value-500, noFocusTrackBar2.Value-500, noFocusTrackBar3.Value - 500));
+            SetSun();
             canvas.Invalidate();
+        }
+
+        private Vector3 SetSun()
+        {
+            return Vector3.Normalize(new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500));
         }
     }
 }
