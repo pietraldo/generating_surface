@@ -30,6 +30,7 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
+            checkBoxFill = new CheckBox();
             txtSunZ = new TextBox();
             txtSunY = new TextBox();
             txtSunX = new TextBox();
@@ -68,6 +69,7 @@
             label2 = new Label();
             label1 = new Label();
             colorDialog1 = new ColorDialog();
+            checkBoxSunLines = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarSunY).BeginInit();
@@ -98,6 +100,8 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
+            panel1.Controls.Add(checkBoxSunLines);
+            panel1.Controls.Add(checkBoxFill);
             panel1.Controls.Add(txtSunZ);
             panel1.Controls.Add(txtSunY);
             panel1.Controls.Add(txtSunX);
@@ -140,6 +144,19 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 795);
             panel1.TabIndex = 1;
+            // 
+            // checkBoxFill
+            // 
+            checkBoxFill.AutoSize = true;
+            checkBoxFill.Checked = true;
+            checkBoxFill.CheckState = CheckState.Checked;
+            checkBoxFill.Location = new Point(9, 334);
+            checkBoxFill.Name = "checkBoxFill";
+            checkBoxFill.Size = new Size(89, 19);
+            checkBoxFill.TabIndex = 101;
+            checkBoxFill.Text = "wypełnienie";
+            checkBoxFill.UseVisualStyleBackColor = true;
+            checkBoxFill.CheckedChanged += checkBoxFill_CheckedChanged;
             // 
             // txtSunZ
             // 
@@ -336,7 +353,7 @@
             checkBoxAxis.AutoSize = true;
             checkBoxAxis.Checked = true;
             checkBoxAxis.CheckState = CheckState.Checked;
-            checkBoxAxis.Location = new Point(9, 327);
+            checkBoxAxis.Location = new Point(9, 309);
             checkBoxAxis.Name = "checkBoxAxis";
             checkBoxAxis.Size = new Size(47, 19);
             checkBoxAxis.TabIndex = 18;
@@ -347,9 +364,7 @@
             // checkBoxLittleGrid
             // 
             checkBoxLittleGrid.AutoSize = true;
-            checkBoxLittleGrid.Checked = true;
-            checkBoxLittleGrid.CheckState = CheckState.Checked;
-            checkBoxLittleGrid.Location = new Point(9, 302);
+            checkBoxLittleGrid.Location = new Point(9, 284);
             checkBoxLittleGrid.Name = "checkBoxLittleGrid";
             checkBoxLittleGrid.Size = new Size(85, 19);
             checkBoxLittleGrid.TabIndex = 17;
@@ -360,7 +375,7 @@
             // checkBoxMainLines
             // 
             checkBoxMainLines.AutoSize = true;
-            checkBoxMainLines.Location = new Point(9, 277);
+            checkBoxMainLines.Location = new Point(9, 259);
             checkBoxMainLines.Name = "checkBoxMainLines";
             checkBoxMainLines.Size = new Size(90, 19);
             checkBoxMainLines.TabIndex = 16;
@@ -371,7 +386,7 @@
             // checkBoxMainPoints
             // 
             checkBoxMainPoints.AutoSize = true;
-            checkBoxMainPoints.Location = new Point(9, 252);
+            checkBoxMainPoints.Location = new Point(9, 234);
             checkBoxMainPoints.Name = "checkBoxMainPoints";
             checkBoxMainPoints.Size = new Size(105, 19);
             checkBoxMainPoints.TabIndex = 15;
@@ -502,6 +517,17 @@
             label1.TabIndex = 1;
             label1.Text = "oś X";
             // 
+            // checkBoxSunLines
+            // 
+            checkBoxSunLines.AutoSize = true;
+            checkBoxSunLines.Location = new Point(20, 749);
+            checkBoxSunLines.Name = "checkBoxSunLines";
+            checkBoxSunLines.Size = new Size(117, 19);
+            checkBoxSunLines.TabIndex = 102;
+            checkBoxSunLines.Text = "Promienie słońca";
+            checkBoxSunLines.UseVisualStyleBackColor = true;
+            checkBoxSunLines.CheckedChanged += checkBoxSunLines_CheckedChanged;
+            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -571,5 +597,7 @@
         private TextBox txtSunZ;
         private TextBox txtSunY;
         private TextBox txtSunX;
+        private CheckBox checkBoxFill;
+        private CheckBox checkBoxSunLines;
     }
 }

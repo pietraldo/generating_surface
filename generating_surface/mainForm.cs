@@ -6,7 +6,7 @@ namespace generating_surface
 {
     public partial class mainForm : Form
     {
-        const string surfaceFile = "surface.txt";
+        const string surfaceFile = "surface4.txt";
 
         const int canvasWidth = 500;
         const int canvasHeight = 500;
@@ -41,10 +41,10 @@ namespace generating_surface
                 MessageBox.Show("B³¹d wczytywania pliku");
             }
 
-            Color IL= Color.White;
+            Color IL = Color.White;
             Color IO = Color.White;
-            double kd = (double)trackBarKd.Value/1000;
-            double ks = (double)trackBarKs.Value/1000;
+            double kd = (double)trackBarKd.Value / 1000;
+            double ks = (double)trackBarKs.Value / 1000;
             int m = trackBarM.Value;
             sunLight = new Light(IL, IO, kd, ks, m);
         }
@@ -71,12 +71,14 @@ namespace generating_surface
 
             surface.RotatePoints();
             surface.GenerateSmallGrid();
+            surface.CalculateVectorsForPoints(sunPosition);
 
             PaintAxis(g);
             PaintMainGrid(g);
             PaintLittleGrid(g);
+            PaintTriangleFilling(g);
             PaintSun(g);
-
+            PaintSunLines(g);
         }
 
         private void PaintAxis(Graphics g)
@@ -104,6 +106,40 @@ namespace generating_surface
             Brush brush = new SolidBrush(Color.FromArgb(r_color, g_color, b_color));
             g.FillRectangle(brush, sunPosition.X, sunPosition.Y, 10, 10);
         }
+
+        private void PaintSunLines(Graphics g)
+        {
+            if (!checkBoxSunLines.Checked) return;
+            for (int i = 0; i < surface.small_grid_size; i++)
+            {
+                for (int j = 0; j < surface.small_grid_size; j++)
+                {
+                    g.DrawLine(Pens.Orange, surface.small_grid[i,j].rotated_point.X, surface.small_grid[i,j].rotated_point.Y, sunPosition.X, sunPosition.Y);
+                }
+            }
+        }
+
+        private void PaintTriangleFilling(Graphics g)
+        {
+            if (!checkBoxFill.Checked) return;
+            for (int i = 0; i < surface.small_grid_size - 1; i++)
+            {
+                for (int j = 0; j < surface.small_grid_size - 1; j++)
+                {
+                    Point p1 = new Point((int)surface.small_grid[i, j].rotated_point.X, (int)surface.small_grid[i, j].rotated_point.Y);
+                    Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
+                    Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
+                    Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
+
+                    Vertex v1 = surface.small_grid[i, j];
+                    Vertex v2 = surface.small_grid[i, j + 1];
+                    Vertex v3 = surface.small_grid[i + 1, j];
+                    Vertex v4 = surface.small_grid[i + 1, j + 1];
+                    FillTriangle(g, v1, v2, v3);
+                    FillTriangle(g, v2, v3, v4);
+                }
+            }
+        }
         private void PaintLittleGrid(Graphics g)
         {
             if (!checkBoxLittleGrid.Checked) return;
@@ -115,7 +151,7 @@ namespace generating_surface
                     Vertex vertex = surface.small_grid[i, j];
                     Color color = CalculateColor(vertex.u, vertex.v, vertex.rotated_point);
 
-                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 10);
+                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 1);
                 }
             }
 
@@ -143,26 +179,6 @@ namespace generating_surface
 
                 }
             }
-
-            //// filling triangles
-            for (int i = 0; i < surface.small_grid_size - 1; i++)
-            {
-                for (int j = 0; j < surface.small_grid_size - 1; j++)
-                {
-                    Point p1 = new Point((int)surface.small_grid[i, j].rotated_point.X, (int)surface.small_grid[i, j].rotated_point.Y);
-                    Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
-                    Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
-                    Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
-
-                    Vertex v1 = surface.small_grid[i, j];
-                    Vertex v2 = surface.small_grid[i, j + 1];
-                    Vertex v3 = surface.small_grid[i + 1, j];
-                    Vertex v4 = surface.small_grid[i + 1, j + 1];
-                    //FillTriangle(g, v1, v2, v3);
-                    //FillTriangle(g, v2, v3, v4);
-                }
-            }
-
         }
 
         private void PaintMainGrid(Graphics g)
@@ -211,10 +227,10 @@ namespace generating_surface
             public int index;
         }
 
-        
+
         private void FillTriangle(Graphics g, Vertex v1, Vertex v2, Vertex v3)
         {
-            
+
             // Sort points by Y coordinate in ascending order
             Vertex[] points = { v1, v2, v3 };
             Array.Sort(points, (a, b) => a.rotated_point.Y.CompareTo(b.rotated_point.Y));
@@ -271,11 +287,19 @@ namespace generating_surface
                     int x2 = (int)aet[i + 1].xMin;
                     for (int j = x1; j < x2; j++)
                     {
-                        //float u = 2;
-                        //float v = 2;
-                        //color = CalculateColor(u, v, surface);
+                        int x = j;
+                        int y = scanLine;
 
-                        PutPixel(g, j, scanLine, Color.AliceBlue);
+                        float[] bar = CalculateBarecentric(v1, v2, v3, x, y);
+
+                        Vector3 N = bar[0] * v1.N + bar[1] * v2.N + bar[2] * v3.N;
+                        Vector3 L = bar[0] * v1.L + bar[1] * v2.L + bar[2] * v3.L;
+                        Vector3 V = bar[0] * v1.V + bar[1] * v2.V + bar[2] * v3.V;
+                        Vector3 R = bar[0] * v1.R + bar[1] * v2.R + bar[2] * v3.R;
+
+                        Color color = FillingTriangle.CalculateColor(N, L, V, R, sunLight.IL, sunLight.IO, sunLight.kd, sunLight.ks, sunLight.m);
+
+                        PutPixel(g, x, y, color);
                     }
                 }
 
@@ -288,14 +312,27 @@ namespace generating_surface
             }
         }
 
+        private float[] CalculateBarecentric(Vertex v1, Vertex v2, Vertex v3, int x, int y)
+        {
+            float x1 = v1.rotated_point.X, y1 = v1.rotated_point.Y;
+            float x2 = v2.rotated_point.X, y2 = v2.rotated_point.Y;
+            float x3 = v3.rotated_point.X, y3 = v3.rotated_point.Y;
+
+            float denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+
+            float lambda1 = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / denominator;
+            float lambda2 = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / denominator;
+            float lambda3 = 1 - lambda1 - lambda2;
+
+            return new float[] { lambda1, lambda2, lambda3 };
+        }
+
         private Color CalculateColor(float u, float v, Vector3 pointPosition)
         {
-            Vector3 L = Vector3.Normalize(sunPosition-pointPosition);
+            Vector3 L = Vector3.Normalize(sunPosition - pointPosition);
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
             Vector3 R = FillingTriangle.CalculateR(N, L);
             Vector3 V = new Vector3(0, 0, 1);
-            
-
 
             return FillingTriangle.CalculateColor(N, L, V, R, sunLight.IL, sunLight.IO, sunLight.kd, sunLight.ks, sunLight.m);
         }
@@ -330,8 +367,8 @@ namespace generating_surface
             }
             else if (mouseDrag)
             {
-                int newX = e.Location.X-canvasWidth/2;
-                int newY = -(e.Location.Y-canvasHeight/2);
+                int newX = e.Location.X - canvasWidth / 2;
+                int newY = -(e.Location.Y - canvasHeight / 2);
 
                 Vector3 newSunPosition = new Vector3(newX, newY, sunPosition.Z);
                 UpdateSunPosition(newSunPosition);
@@ -428,13 +465,13 @@ namespace generating_surface
         }
 
 
-        
-        
+
+
 
         private void trackBarSunX_Scroll(object sender, EventArgs e)
         {
             int sunX = trackBarSunX.Value;
-            Vector3 pos=sunPosition;
+            Vector3 pos = sunPosition;
             pos.X = sunX;
             UpdateSunPosition(pos);
             canvas.Invalidate();
@@ -455,6 +492,16 @@ namespace generating_surface
             Vector3 pos = sunPosition;
             pos.Z = sunZ;
             UpdateSunPosition(pos);
+            canvas.Invalidate();
+        }
+
+        private void checkBoxFill_CheckedChanged(object sender, EventArgs e)
+        {
+            canvas.Invalidate();
+        }
+
+        private void checkBoxSunLines_CheckedChanged(object sender, EventArgs e)
+        {
             canvas.Invalidate();
         }
     }

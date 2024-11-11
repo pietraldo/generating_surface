@@ -112,7 +112,16 @@ namespace generating_surface
             if (g > 255) g = 255;
             if (b > 255) b = 255;
 
+            if(r < 0) r = 0;
+            if (g < 0) g = 0;
+            if (b < 0) b = 0;
+
             return Color.FromArgb(r,g,b);
+        }
+
+        public static double CalculateArea(Point p1, Point p2, Point p3)
+        {
+            return 0.5 * Math.Abs(p1.X * (p2.Y - p3.Y) + p2.X * (p3.Y - p1.Y) + p3.X * (p1.Y - p2.Y));
         }
     }
 }

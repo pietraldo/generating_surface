@@ -16,6 +16,14 @@ namespace generating_surface
         public float v;
 
         public Vector3 N;
+        public Vector3 L;
+        public Vector3 V;
+        public Vector3 R;
 
+
+        public Point Rotated2DPoint()
+        {
+            return new Point((int)rotated_point.X, (int)rotated_point.Y);
+        }
     }
 }

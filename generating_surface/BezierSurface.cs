@@ -67,9 +67,18 @@ namespace generating_surface
             }
         }
 
-        public void CalculateVectorsForColor()
+        public void CalculateVectorsForPoints(Vector3 sunPosition)
         {
-
+            for (int i = 0; i < small_grid_size; i++)
+            {
+                for (int j = 0; j < small_grid_size; j++)
+                {
+                    small_grid[i,j].L = Vector3.Normalize(sunPosition - small_grid[i,j].rotated_point);
+                    small_grid[i, j].N = FillingTriangle.CalculateN(small_grid[i, j].u, small_grid[i, j].v, this);
+                    small_grid[i, j].V = new Vector3(0, 0, 1);
+                    small_grid[i, j].R = FillingTriangle.CalculateR(small_grid[i, j].N, small_grid[i, j].L);
+                }
+            }
         }
 
         public bool ReadPointsFromFile(string file)

@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="surface4.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>UserControl</SubType>
+    </None>
     <None Update="surface3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>UserControl</SubType>
