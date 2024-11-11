@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             canvas = new PictureBox();
             panel1 = new Panel();
+            btnSunMovement = new Button();
+            btnSurfaceColor = new Button();
             checkBoxSunLines = new CheckBox();
             checkBoxFill = new CheckBox();
             txtSunZ = new TextBox();
@@ -60,7 +62,7 @@
             trackBarAxisY = new NoFocusTrackBar();
             txtAxisYValue = new TextBox();
             label4 = new Label();
-            btnColor = new Button();
+            btnLightColor = new Button();
             trackBarAccuracy = new NoFocusTrackBar();
             txtAccuracy = new TextBox();
             label3 = new Label();
@@ -72,6 +74,7 @@
             label1 = new Label();
             colorDialog1 = new ColorDialog();
             timer1 = new System.Windows.Forms.Timer(components);
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarSunY).BeginInit();
@@ -102,6 +105,9 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
+            panel1.Controls.Add(comboBox1);
+            panel1.Controls.Add(btnSunMovement);
+            panel1.Controls.Add(btnSurfaceColor);
             panel1.Controls.Add(checkBoxSunLines);
             panel1.Controls.Add(checkBoxFill);
             panel1.Controls.Add(txtSunZ);
@@ -131,7 +137,7 @@
             panel1.Controls.Add(trackBarAxisY);
             panel1.Controls.Add(txtAxisYValue);
             panel1.Controls.Add(label4);
-            panel1.Controls.Add(btnColor);
+            panel1.Controls.Add(btnLightColor);
             panel1.Controls.Add(trackBarAccuracy);
             panel1.Controls.Add(txtAccuracy);
             panel1.Controls.Add(label3);
@@ -146,6 +152,26 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 795);
             panel1.TabIndex = 1;
+            // 
+            // btnSunMovement
+            // 
+            btnSunMovement.Location = new Point(143, 749);
+            btnSunMovement.Name = "btnSunMovement";
+            btnSunMovement.Size = new Size(59, 23);
+            btnSunMovement.TabIndex = 104;
+            btnSunMovement.Text = "Stop";
+            btnSunMovement.UseVisualStyleBackColor = true;
+            btnSunMovement.Click += btnSunMovement_Click;
+            // 
+            // btnSurfaceColor
+            // 
+            btnSurfaceColor.Location = new Point(9, 566);
+            btnSurfaceColor.Name = "btnSurfaceColor";
+            btnSurfaceColor.Size = new Size(182, 23);
+            btnSurfaceColor.TabIndex = 103;
+            btnSurfaceColor.Text = "Wybierz kolor powierzchni";
+            btnSurfaceColor.UseVisualStyleBackColor = true;
+            btnSurfaceColor.Click += btnSurfaceColor_Click;
             // 
             // checkBoxSunLines
             // 
@@ -226,7 +252,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            label9.Location = new Point(23, 581);
+            label9.Location = new Point(20, 592);
             label9.Name = "label9";
             label9.Size = new Size(86, 32);
             label9.TabIndex = 94;
@@ -435,15 +461,15 @@
             label4.TabIndex = 12;
             label4.Text = "oś Y";
             // 
-            // btnColor
+            // btnLightColor
             // 
-            btnColor.Location = new Point(9, 537);
-            btnColor.Name = "btnColor";
-            btnColor.Size = new Size(182, 23);
-            btnColor.TabIndex = 11;
-            btnColor.Text = "Wybierz kolor światła";
-            btnColor.UseVisualStyleBackColor = true;
-            btnColor.Click += btnColor_Click;
+            btnLightColor.Location = new Point(9, 537);
+            btnLightColor.Name = "btnLightColor";
+            btnLightColor.Size = new Size(182, 23);
+            btnLightColor.TabIndex = 11;
+            btnLightColor.Text = "Wybierz kolor światła";
+            btnLightColor.UseVisualStyleBackColor = true;
+            btnLightColor.Click += btnColor_Click;
             // 
             // trackBarAccuracy
             // 
@@ -536,6 +562,15 @@
             timer1.Interval = 10;
             timer1.Tick += timer1_Tick;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(9, 12);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(121, 23);
+            comboBox1.TabIndex = 105;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -576,7 +611,7 @@
         private NoFocusTrackBar trackBarAccuracy;
         private TextBox txtAccuracy;
         private Label label3;
-        private Button btnColor;
+        private Button btnLightColor;
         private NoFocusTrackBar trackBarAxisY;
         private TextBox txtAxisYValue;
         private Label label4;
@@ -608,5 +643,8 @@
         private CheckBox checkBoxFill;
         private CheckBox checkBoxSunLines;
         private System.Windows.Forms.Timer timer1;
+        private Button btnSurfaceColor;
+        private Button btnSunMovement;
+        private ComboBox comboBox1;
     }
 }

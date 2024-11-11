@@ -6,7 +6,7 @@ namespace generating_surface
 {
     public partial class mainForm : Form
     {
-        const string surfaceFile = "surface4.txt";
+        const string surfaceFile = "surface5.txt";
 
         const int canvasWidth = 500;
         const int canvasHeight = 500;
@@ -33,6 +33,8 @@ namespace generating_surface
             txtAxisZValue.Text = trackBarAxisZ.Value.ToString();
             txtAxisYValue.Text = trackBarAxisY.Value.ToString();
             txtAccuracy.Text = trackBarAccuracy.Value.ToString();
+
+            // ComboBox
 
 
             surface = new BezierSurface();
@@ -432,7 +434,18 @@ namespace generating_surface
         private void btnColor_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
-            btnColor.BackColor = colorDialog1.Color;
+            btnLightColor.BackColor = colorDialog1.Color;
+            sunLight.IL = colorDialog1.Color;
+            canvas.Invalidate();
+        }
+
+
+        private void btnSurfaceColor_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            btnSurfaceColor.BackColor = colorDialog1.Color;
+            sunLight.IO = colorDialog1.Color;
+            canvas.Invalidate();
         }
 
         private void trackBarKd_Scroll(object sender, EventArgs e)
@@ -515,7 +528,7 @@ namespace generating_surface
             double alfa = Math.Atan2(sunPosition.Y, sunPosition.X);
 
             r += sunMoveDirection * 2;
-            if(r>200)
+            if (r > 200)
             {
                 r = 200;
                 sunMoveDirection = -1;
@@ -533,7 +546,7 @@ namespace generating_surface
             newSunPosition.X = (float)(r * Math.Cos(newAlfa));
             newSunPosition.Y = (float)(r * Math.Sin(newAlfa));
 
-            
+
             //newSunPosition.Z += 1;
             //if ((int)newSunPosition.Z >= 400)
             //{
@@ -545,6 +558,24 @@ namespace generating_surface
             //}
             UpdateSunPosition(newSunPosition);
             canvas.Invalidate();
+        }
+
+        private void btnSunMovement_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = !timer1.Enabled;
+            if (timer1.Enabled)
+            {
+                btnSunMovement.Text = "Stop";
+            }
+            else
+            {
+                btnSunMovement.Text = "Start";
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
