@@ -16,7 +16,7 @@ namespace generating_surface
         const int canvasTop = canvasHeight / 2;
         const int canvasBottom = -canvasHeight / 2;
 
-        int n = 30;
+        BezierSurface surface;
 
         public mainForm()
         {
@@ -32,6 +32,13 @@ namespace generating_surface
             txtAxisYValue.Text = trackBarAxisY.Value.ToString();
             txtAccuracy.Text = trackBarAccuracy.Value.ToString();
 
+
+            surface = new BezierSurface();
+            if (!surface.ReadPointsFromFile(surfaceFile))
+            {
+                MessageBox.Show("B³¹d wczytywania pliku");
+                return;
+            }
         }
 
         public static void PutPixel(Graphics g, int x, int y, Color color, int size = 1)
@@ -49,57 +56,41 @@ namespace generating_surface
             g.TranslateTransform((float)canvas.Width / 2, -(float)canvas.Height / 2);
 
 
-            BezierSurface surface = new BezierSurface();
-            if (!surface.ReadPointsFromFile(surfaceFile))
-            {
-                MessageBox.Show("B³¹d wczytywania pliku");
-                return;
-            }
+            surface.degreeX = trackBarAxisX.Value;
+            surface.degreeY = trackBarAxisY.Value;
+            surface.degreeZ = trackBarAxisZ.Value;
+            surface.small_grid_size = trackBarAccuracy.Value;
 
-            float degreeX = trackBarAxisX.Value;
-            float degreeZ = trackBarAxisZ.Value;
-            float degreeY = trackBarAxisY.Value;
-            n = trackBarAccuracy.Value;
+            surface.RotatePoints();
+            surface.GenerateSmallGrid();
 
-            Axis(g);
-            Vector3[,] rotated = MainGrid(surface, g, degreeX, degreeY, degreeZ);
-            LittleGrid(surface, rotated, g, degreeX, degreeY, degreeZ);
+            PaintAxis(g);
+            PaintMainGrid(g);
+            PaintLittleGrid(g);
 
             Vector3 sun = GetSunPossition();
             g.FillRectangle(Brushes.Yellow, sun.X, sun.Y, 10, 10);
         }
 
-        private void Axis(Graphics g)
+        private void PaintAxis(Graphics g)
         {
             if (!checkBoxAxis.Checked) return;
             g.DrawLine(Pens.Black, 0, canvasTop, 0, canvasBottom);
             g.DrawLine(Pens.Black, canvasLeft, 0, canvasRight, 0);
         }
 
-        private void LittleGrid(BezierSurface surface, Vector3[,] rotated, Graphics g, float degreeX, float degreeY, float degreeZ)
+        private void PaintLittleGrid(Graphics g)
         {
             if (!checkBoxLittleGrid.Checked) return;
 
-            Vector3[,] points = new Vector3[n, n];
-            float step = 1f / (n - 1);
-
-            // counting points, rotating and drawing them
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < surface.small_grid_size; i++)
             {
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < surface.small_grid_size; j++)
                 {
-                    points[i, j] = surface.CountPoint(i * step, j * step);
+                    Vertex vertex = surface.small_grid[i, j];
+                    Color color = CalculateColor(vertex.u, vertex.v, vertex.rotated_point);
 
-                    float u = i * step;
-                    float v = j * step;
-
-                    points[i, j] = BezierSurface.RotateX(points[i, j], degreeX);
-                    points[i, j] = BezierSurface.RotateZ(points[i, j], degreeZ);
-                    points[i, j] = BezierSurface.RotateY(points[i, j], degreeY);
-
-                    Color color = CalculateColor(u, v, rotated, points[i, j]);
-
-                    PutPixel(g, (int)points[i, j].X, (int)points[i, j].Y, color, 10);
+                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 10);
                 }
             }
 
@@ -144,30 +135,16 @@ namespace generating_surface
 
         }
 
-        private Vector3[,] MainGrid(BezierSurface surface, Graphics g, float degreeX, float degreeY, float degreeZ)
+        private void PaintMainGrid(Graphics g)
         {
-
-            //rotating points of the main grid
-            Vector3[,] rotated = new Vector3[BezierSurface.size, BezierSurface.size];
-            for (int i = 0; i < BezierSurface.size; i++)
-            {
-                for (int j = 0; j < BezierSurface.size; j++)
-                {
-                    rotated[i, j] = BezierSurface.RotateX(surface.siatka[i, j], degreeX);
-                    rotated[i, j] = BezierSurface.RotateZ(rotated[i, j], degreeZ);
-                    rotated[i, j] = BezierSurface.RotateY(rotated[i, j], degreeY);
-                }
-            }
-
             // main grid
             if (checkBoxMainPoints.Checked)
             {
-
                 for (int i = 0; i < BezierSurface.size; i++)
                 {
                     for (int j = 0; j < BezierSurface.size; j++)
                     {
-                        PutPixel(g, (int)rotated[i, j].X, (int)rotated[i, j].Y, Color.Black, 4);
+                        PutPixel(g, (int)surface.rotated_points[i,j].X, (int)surface.rotated_points[i, j].Y, Color.Black, 4);
                     }
                 }
             }
@@ -179,22 +156,21 @@ namespace generating_surface
                 {
                     for (int j = 0; j < BezierSurface.size; j++)
                     {
-                        Point p1 = new Point((int)rotated[i, j].X, (int)rotated[i, j].Y);
+                        Point p1 = new Point((int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y);
                         if (j + 1 < BezierSurface.size)
                         {
-                            Point p2 = new Point((int)rotated[i, j + 1].X, (int)rotated[i, j + 1].Y);
+                            Point p2 = new Point((int)surface.rotated_points[i, j + 1].X, (int)surface.rotated_points[i, j + 1].Y);
                             g.DrawLine(Pens.Black, p1, p2);
                         }
                         if (i + 1 < BezierSurface.size)
                         {
-                            Point p3 = new Point((int)rotated[i + 1, j].X, (int)rotated[i + 1, j].Y);
+                            Point p3 = new Point((int)surface.rotated_points[i + 1, j].X, (int)surface.rotated_points[i + 1, j].Y);
                             g.DrawLine(Pens.Black, p1, p3);
                         }
 
                     }
                 }
             }
-            return rotated;
         }
 
         private class Edge
@@ -279,7 +255,7 @@ namespace generating_surface
             }
         }
 
-        private Color CalculateColor(float u, float v, Vector3[,] surface, Vector3 pointPosition)
+        private Color CalculateColor(float u, float v, Vector3 pointPosition)
         {
             Vector3 L = Vector3.Normalize(pointPosition - GetSunPossition());
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);

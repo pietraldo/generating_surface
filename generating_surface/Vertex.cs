@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace generating_surface
 {
-    internal class Vertex
+    public class Vertex
     {
+        public Vector3 start_point;
+        public Vector3 rotated_point;
+
         public float u;
         public float v;
 

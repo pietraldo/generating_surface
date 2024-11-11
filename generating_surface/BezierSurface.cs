@@ -11,11 +11,60 @@ namespace generating_surface
     public class BezierSurface
     {
         public const int size = 4;
-        public Vector3[,] siatka = new Vector3[size, size];
+
+        public Vector3[,] start_points = new Vector3[size, size];
+        public Vector3[,] rotated_points = new Vector3[size, size];
+
+        public Vertex[,] small_grid;
+        public int small_grid_size;
+
+        public float degreeX = 0;
+        public float degreeY = 0;
+        public float degreeZ = 0;
 
 
         public BezierSurface()
         {
+        }
+
+        public void RotatePoints()
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    rotated_points[i, j] = start_points[i, j];
+                    rotated_points[i, j] = RotateX(rotated_points[i, j], degreeX);
+                    rotated_points[i, j] = RotateY(rotated_points[i, j], degreeY);
+                    rotated_points[i, j] = RotateZ(rotated_points[i, j], degreeZ);
+                }
+            }
+        }
+
+        public void GenerateSmallGrid()
+        {
+            int n = small_grid_size;
+            small_grid = new Vertex[n, n];
+
+            float step = 1f / (n - 1);
+
+            // counting points, rotating and drawing them
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    small_grid[i, j] = new Vertex();
+                    small_grid[i, j].start_point = CountPoint(i * step, j * step);
+
+                    small_grid[i, j].u = i * step;
+                    small_grid[i, j].v = j * step;
+
+                    small_grid[i, j].rotated_point = small_grid[i, j].start_point;
+                    small_grid[i, j].rotated_point = BezierSurface.RotateX(small_grid[i, j].rotated_point, degreeX);
+                    small_grid[i, j].rotated_point = BezierSurface.RotateZ(small_grid[i, j].rotated_point, degreeZ);
+                    small_grid[i, j].rotated_point = BezierSurface.RotateY(small_grid[i, j].rotated_point, degreeY);
+                }
+            }
         }
 
         public bool ReadPointsFromFile(string file)
@@ -33,7 +82,7 @@ namespace generating_surface
                     string[] values = line.Split(' ');
                     if (values.Length != 3) return false;
 
-                    siatka[i / size, i % size] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+                    start_points[i / size, i % size] = new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
 
                     i++;
                 }
@@ -43,20 +92,6 @@ namespace generating_surface
 
             return true;
         }
-
-        public void Print()
-        {
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    Debug.Write(siatka[i, j]);
-                    Debug.Write(" ");
-                }
-                Debug.WriteLine("");
-            }
-        }
-
         public static Vector3 RotateX(Vector3 v, float degree)
         {
             Vector3 rotated = new Vector3();
@@ -101,9 +136,9 @@ namespace generating_surface
                     float bernsteinU = (float)Bernstein(u, i, size -1);
                     float bernsteinV = (float)Bernstein(v, j, size -1);
 
-                    point.X += siatka[i, j].X * bernsteinU * bernsteinV;
-                    point.Y += siatka[i, j].Y * bernsteinU * bernsteinV;
-                    point.Z += siatka[i, j].Z * bernsteinU * bernsteinV;
+                    point.X += start_points[i, j].X * bernsteinU * bernsteinV;
+                    point.Y += start_points[i, j].Y * bernsteinU * bernsteinV;
+                    point.Z += start_points[i, j].Z * bernsteinU * bernsteinV;
                 }
             }
             return point;
