@@ -107,48 +107,48 @@ namespace generating_surface
                     Vertex vertex = surface.small_grid[i, j];
                     Color color = CalculateColor(vertex.u, vertex.v, vertex.rotated_point);
 
-                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 10);
+                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 2);
                 }
             }
 
             // drawing lines
-            //for (int i = 0; i < n; i++)
-            //{
-            //    for (int j = 0; j < n; j++)
-            //    {
-            //        Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
-            //        if (j + 1 < n)
-            //        {
-            //            Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
-            //            g.DrawLine(Pens.Black, p1, p2);
-            //        }
-            //        if (i + 1 < n)
-            //        {
-            //            Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
-            //            g.DrawLine(Pens.Black, p1, p3);
-            //        }
-            //        if (i + 1 < n && j + 1 < n)
-            //        {
-            //            Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
-            //            g.DrawLine(Pens.Black, p1, p4);
-            //        }
+            for (int i = 0; i < surface.small_grid_size; i++)
+            {
+                for (int j = 0; j < surface.small_grid_size; j++)
+                {
+                    Point p1 = new Point((int)surface.small_grid[i, j].rotated_point.X, (int)surface.small_grid[i, j].rotated_point.Y);
+                    if (j + 1 < surface.small_grid_size)
+                    {
+                        Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
+                        g.DrawLine(Pens.Black, p1, p2);
+                    }
+                    if (i + 1 < surface.small_grid_size)
+                    {
+                        Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
+                        g.DrawLine(Pens.Black, p1, p3);
+                    }
+                    if (i + 1 < surface.small_grid_size && j + 1 < surface.small_grid_size)
+                    {
+                        Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
+                        g.DrawLine(Pens.Black, p1, p4);
+                    }
 
-            //    }
-            //}
+                }
+            }
 
             //// filling triangles
-            //for (int i = 0; i < n - 1; i++)
-            //{
-            //    for (int j = 0; j < n - 1; j++)
-            //    {
-            //        Point p1 = new Point((int)points[i, j].X, (int)points[i, j].Y);
-            //        Point p2 = new Point((int)points[i, j + 1].X, (int)points[i, j + 1].Y);
-            //        Point p3 = new Point((int)points[i + 1, j].X, (int)points[i + 1, j].Y);
-            //        Point p4 = new Point((int)points[i + 1, j + 1].X, (int)points[i + 1, j + 1].Y);
-            //        FillTriangle(g, p1, p2, p4, Color.Yellow, surface);
-            //        FillTriangle(g, p1, p3, p4, Color.Black, surface);
-            //    }
-            //}
+            for (int i = 0; i < surface.small_grid_size - 1; i++)
+            {
+                for (int j = 0; j < surface.small_grid_size - 1; j++)
+                {
+                    Point p1 = new Point((int)surface.small_grid[i, j].rotated_point.X, (int)surface.small_grid[i, j].rotated_point.Y);
+                    Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
+                    Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
+                    Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
+                    FillTriangle(g, p1, p2, p4, Color.Yellow, surface);
+                    FillTriangle(g, p1, p3, p4, Color.Black, surface);
+                }
+            }
 
         }
 
@@ -259,7 +259,7 @@ namespace generating_surface
                         //float u = 2;
                         //float v = 2;
                         //color = CalculateColor(u, v, surface);
-                        PutPixel(g, j, scanLine, Color.LightBlue);
+                        PutPixel(g, j, scanLine, color);
                     }
                 }
 
