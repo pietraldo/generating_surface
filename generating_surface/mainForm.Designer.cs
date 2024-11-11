@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             canvas = new PictureBox();
             panel1 = new Panel();
+            checkBoxSunLines = new CheckBox();
             checkBoxFill = new CheckBox();
             txtSunZ = new TextBox();
             txtSunY = new TextBox();
@@ -69,7 +71,7 @@
             label2 = new Label();
             label1 = new Label();
             colorDialog1 = new ColorDialog();
-            checkBoxSunLines = new CheckBox();
+            timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarSunY).BeginInit();
@@ -144,6 +146,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 795);
             panel1.TabIndex = 1;
+            // 
+            // checkBoxSunLines
+            // 
+            checkBoxSunLines.AutoSize = true;
+            checkBoxSunLines.Location = new Point(20, 749);
+            checkBoxSunLines.Name = "checkBoxSunLines";
+            checkBoxSunLines.Size = new Size(117, 19);
+            checkBoxSunLines.TabIndex = 102;
+            checkBoxSunLines.Text = "Promienie słońca";
+            checkBoxSunLines.UseVisualStyleBackColor = true;
+            checkBoxSunLines.CheckedChanged += checkBoxSunLines_CheckedChanged;
             // 
             // checkBoxFill
             // 
@@ -517,16 +530,11 @@
             label1.TabIndex = 1;
             label1.Text = "oś X";
             // 
-            // checkBoxSunLines
+            // timer1
             // 
-            checkBoxSunLines.AutoSize = true;
-            checkBoxSunLines.Location = new Point(20, 749);
-            checkBoxSunLines.Name = "checkBoxSunLines";
-            checkBoxSunLines.Size = new Size(117, 19);
-            checkBoxSunLines.TabIndex = 102;
-            checkBoxSunLines.Text = "Promienie słońca";
-            checkBoxSunLines.UseVisualStyleBackColor = true;
-            checkBoxSunLines.CheckedChanged += checkBoxSunLines_CheckedChanged;
+            timer1.Enabled = true;
+            timer1.Interval = 10;
+            timer1.Tick += timer1_Tick;
             // 
             // mainForm
             // 
@@ -599,5 +607,6 @@
         private TextBox txtSunX;
         private CheckBox checkBoxFill;
         private CheckBox checkBoxSunLines;
+        private System.Windows.Forms.Timer timer1;
     }
 }

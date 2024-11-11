@@ -114,7 +114,7 @@ namespace generating_surface
             {
                 for (int j = 0; j < surface.small_grid_size; j++)
                 {
-                    g.DrawLine(Pens.Orange, surface.small_grid[i,j].rotated_point.X, surface.small_grid[i,j].rotated_point.Y, sunPosition.X, sunPosition.Y);
+                    g.DrawLine(Pens.Orange, surface.small_grid[i, j].rotated_point.X, surface.small_grid[i, j].rotated_point.Y, sunPosition.X, sunPosition.Y);
                 }
             }
         }
@@ -340,17 +340,17 @@ namespace generating_surface
 
         Point lastMousePosition = new Point(0, 0);
         bool mouseDrag = false;
-        bool sun = false;
+        bool sunDrag = false;
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             lastMousePosition = e.Location;
             mouseDrag = true;
-            sun = e.Button == MouseButtons.Right;
+            sunDrag = e.Button == MouseButtons.Right;
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDrag && !sun)
+            if (mouseDrag && !sunDrag)
             {
                 float dy = e.Location.X - lastMousePosition.X;
                 float dx = e.Location.Y - lastMousePosition.Y;
@@ -381,6 +381,7 @@ namespace generating_surface
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDrag = false;
+            sunDrag = false;
         }
 
         private void trackBarAlfa_Scroll(object sender, EventArgs e)
@@ -502,6 +503,47 @@ namespace generating_surface
 
         private void checkBoxSunLines_CheckedChanged(object sender, EventArgs e)
         {
+            canvas.Invalidate();
+        }
+
+        int sunMoveDirection = 1;
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (mouseDrag && sunDrag) return;
+
+            double r = Math.Sqrt(sunPosition.X * sunPosition.X + sunPosition.Y * sunPosition.Y);
+            double alfa = Math.Atan2(sunPosition.Y, sunPosition.X);
+
+            r += sunMoveDirection * 2;
+            if(r>200)
+            {
+                r = 200;
+                sunMoveDirection = -1;
+            }
+            else if (r < 0)
+            {
+                r = 0;
+                sunMoveDirection = 1;
+            }
+
+            double newAlfa = alfa + 0.1;
+
+            Vector3 newSunPosition = sunPosition;
+
+            newSunPosition.X = (float)(r * Math.Cos(newAlfa));
+            newSunPosition.Y = (float)(r * Math.Sin(newAlfa));
+
+            
+            //newSunPosition.Z += 1;
+            //if ((int)newSunPosition.Z >= 400)
+            //{
+            //    newSunPosition.Z = -400;
+            //}
+            //else
+            //{
+            //    newSunPosition.Z += 1;
+            //}
+            UpdateSunPosition(newSunPosition);
             canvas.Invalidate();
         }
     }
