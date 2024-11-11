@@ -10,10 +10,10 @@ namespace generating_surface
 {
     public class BezierSurface
     {
-        public const int size = 4;
+        public int size;
 
-        public Vector3[,] start_points = new Vector3[size, size];
-        public Vector3[,] rotated_points = new Vector3[size, size];
+        public Vector3[,] start_points;
+        public Vector3[,] rotated_points;
 
         public Vertex[,] small_grid;
         public int small_grid_size;
@@ -84,6 +84,10 @@ namespace generating_surface
         public bool ReadPointsFromFile(string file)
         {
             if (!File.Exists(file)) return false;
+
+            size = (int)Math.Sqrt(File.ReadLines(file).Count());
+            start_points = new Vector3[size, size];
+            rotated_points = new Vector3[size, size];
 
             using (StreamReader sr = new StreamReader(file))
             {

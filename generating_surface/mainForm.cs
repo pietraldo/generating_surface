@@ -6,8 +6,6 @@ namespace generating_surface
 {
     public partial class mainForm : Form
     {
-        const string surfaceFile = "surface5.txt";
-
         const int canvasWidth = 500;
         const int canvasHeight = 500;
 
@@ -35,13 +33,10 @@ namespace generating_surface
             txtAccuracy.Text = trackBarAccuracy.Value.ToString();
 
             // ComboBox
+            ReloadComboBoxItems();
 
-
-            surface = new BezierSurface();
-            if (!surface.ReadPointsFromFile(surfaceFile))
-            {
-                MessageBox.Show("B³¹d wczytywania pliku");
-            }
+            // Create new surface
+            ReloadSurface();
 
             Color IL = Color.White;
             Color IO = Color.White;
@@ -51,13 +46,29 @@ namespace generating_surface
             sunLight = new Light(IL, IO, kd, ks, m);
         }
 
+        private void ReloadComboBoxItems()
+        {
+            cmbSurfaceFile.Items.Clear();
+            DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
+            cmbSurfaceFile.Items.AddRange(directoryInfo.GetFiles("*.txt").Select(file => file.Name).ToArray());
+            cmbSurfaceFile.SelectedIndex = 0;
+        }
+
         public static void PutPixel(Graphics g, int x, int y, Color color, int size = 1)
         {
             Brush brush = new SolidBrush(color);
             g.FillRectangle(brush, x - size / 2, y - size / 2, size, size);
         }
 
-
+        private void ReloadSurface()
+        {
+            surface = new BezierSurface();
+            if (!surface.ReadPointsFromFile(cmbSurfaceFile.Text))
+            {
+                MessageBox.Show("B³¹d wczytywania pliku");
+            }
+            canvas.Invalidate();
+        }
 
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
@@ -188,9 +199,9 @@ namespace generating_surface
             // main grid
             if (checkBoxMainPoints.Checked)
             {
-                for (int i = 0; i < BezierSurface.size; i++)
+                for (int i = 0; i < surface.size; i++)
                 {
-                    for (int j = 0; j < BezierSurface.size; j++)
+                    for (int j = 0; j < surface.size; j++)
                     {
                         PutPixel(g, (int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y, Color.Black, 4);
                     }
@@ -200,17 +211,17 @@ namespace generating_surface
             //main grid lines
             if (checkBoxMainLines.Checked)
             {
-                for (int i = 0; i < BezierSurface.size; i++)
+                for (int i = 0; i < surface.size; i++)
                 {
-                    for (int j = 0; j < BezierSurface.size; j++)
+                    for (int j = 0; j < surface.size; j++)
                     {
                         Point p1 = new Point((int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y);
-                        if (j + 1 < BezierSurface.size)
+                        if (j + 1 < surface.size)
                         {
                             Point p2 = new Point((int)surface.rotated_points[i, j + 1].X, (int)surface.rotated_points[i, j + 1].Y);
                             g.DrawLine(Pens.Black, p1, p2);
                         }
-                        if (i + 1 < BezierSurface.size)
+                        if (i + 1 < surface.size)
                         {
                             Point p3 = new Point((int)surface.rotated_points[i + 1, j].X, (int)surface.rotated_points[i + 1, j].Y);
                             g.DrawLine(Pens.Black, p1, p3);
@@ -573,9 +584,14 @@ namespace generating_surface
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbSurfaceFile_Click(object sender, EventArgs e)
         {
-            
+            ReloadComboBoxItems();
+        }
+
+        private void cmbSurfaceFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ReloadSurface();
         }
     }
 }

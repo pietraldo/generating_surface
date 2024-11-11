@@ -16,7 +16,7 @@ namespace generating_surface
         {
             Vector3 Pu = new Vector3();
 
-            int n = BezierSurface.size;
+            int n = surface.size;
             int m = n;
 
 
@@ -43,7 +43,7 @@ namespace generating_surface
         {
             Vector3 Pv = new Vector3();
 
-            int n = BezierSurface.size;
+            int n = surface.size;
             int m = n;
 
 

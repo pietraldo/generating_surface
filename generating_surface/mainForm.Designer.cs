@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             canvas = new PictureBox();
             panel1 = new Panel();
+            cmbSurfaceFile = new ComboBox();
             btnSunMovement = new Button();
             btnSurfaceColor = new Button();
             checkBoxSunLines = new CheckBox();
@@ -74,7 +75,6 @@
             label1 = new Label();
             colorDialog1 = new ColorDialog();
             timer1 = new System.Windows.Forms.Timer(components);
-            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarSunY).BeginInit();
@@ -105,7 +105,7 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
-            panel1.Controls.Add(comboBox1);
+            panel1.Controls.Add(cmbSurfaceFile);
             panel1.Controls.Add(btnSunMovement);
             panel1.Controls.Add(btnSurfaceColor);
             panel1.Controls.Add(checkBoxSunLines);
@@ -152,6 +152,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 795);
             panel1.TabIndex = 1;
+            // 
+            // cmbSurfaceFile
+            // 
+            cmbSurfaceFile.FormattingEnabled = true;
+            cmbSurfaceFile.Location = new Point(9, 12);
+            cmbSurfaceFile.Name = "cmbSurfaceFile";
+            cmbSurfaceFile.Size = new Size(121, 23);
+            cmbSurfaceFile.TabIndex = 105;
+            cmbSurfaceFile.SelectedIndexChanged += cmbSurfaceFile_SelectedIndexChanged;
+            cmbSurfaceFile.Click += cmbSurfaceFile_Click;
             // 
             // btnSunMovement
             // 
@@ -278,6 +288,7 @@
             trackBarSunZ.Size = new Size(104, 45);
             trackBarSunZ.TabIndex = 92;
             trackBarSunZ.TickStyle = TickStyle.None;
+            trackBarSunZ.Value = 30;
             trackBarSunZ.Scroll += trackBarSunZ_Scroll;
             // 
             // trackBarSunX
@@ -562,15 +573,6 @@
             timer1.Interval = 10;
             timer1.Tick += timer1_Tick;
             // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(9, 12);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 105;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -645,6 +647,6 @@
         private System.Windows.Forms.Timer timer1;
         private Button btnSurfaceColor;
         private Button btnSunMovement;
-        private ComboBox comboBox1;
+        private ComboBox cmbSurfaceFile;
     }
 }
