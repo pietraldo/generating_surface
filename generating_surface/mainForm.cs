@@ -86,10 +86,10 @@ namespace generating_surface
             surface.GenerateSmallGrid();
             surface.CalculateVectorsForPoints(sunPosition);
 
+            PaintTriangleFilling(g);
             PaintAxis(g);
             PaintMainGrid(g);
             PaintLittleGrid(g);
-            PaintTriangleFilling(g);
             PaintSun(g);
             PaintSunLines(g);
         }
@@ -177,17 +177,17 @@ namespace generating_surface
                     if (j + 1 < surface.small_grid_size)
                     {
                         Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
-                        g.DrawLine(Pens.Black, p1, p2);
+                        g.DrawLine(Pens.Red, p1, p2);
                     }
                     if (i + 1 < surface.small_grid_size)
                     {
                         Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
-                        g.DrawLine(Pens.Black, p1, p3);
+                        g.DrawLine(Pens.Red, p1, p3);
                     }
                     if (i + 1 < surface.small_grid_size && j + 1 < surface.small_grid_size)
                     {
                         Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
-                        g.DrawLine(Pens.Black, p1, p4);
+                        g.DrawLine(Pens.Red, p1, p4);
                     }
 
                 }
@@ -203,7 +203,7 @@ namespace generating_surface
                 {
                     for (int j = 0; j < surface.size; j++)
                     {
-                        PutPixel(g, (int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y, Color.Black, 4);
+                        PutPixel(g, (int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y, Color.Red, 4);
                     }
                 }
             }
@@ -219,17 +219,23 @@ namespace generating_surface
                         if (j + 1 < surface.size)
                         {
                             Point p2 = new Point((int)surface.rotated_points[i, j + 1].X, (int)surface.rotated_points[i, j + 1].Y);
-                            g.DrawLine(Pens.Black, p1, p2);
+                            g.DrawLine(Pens.Red, p1, p2);
                         }
                         if (i + 1 < surface.size)
                         {
                             Point p3 = new Point((int)surface.rotated_points[i + 1, j].X, (int)surface.rotated_points[i + 1, j].Y);
-                            g.DrawLine(Pens.Black, p1, p3);
+                            g.DrawLine(Pens.Red, p1, p3);
                         }
 
                     }
                 }
             }
+        }
+
+        private void LoadTexture()
+        {
+            //Bitmap texture = new Bitmap("normal_map.jpg");
+            //surface.texture = texture;
         }
 
         private class Edge
@@ -593,5 +599,6 @@ namespace generating_surface
         {
             ReloadSurface();
         }
+
     }
 }
