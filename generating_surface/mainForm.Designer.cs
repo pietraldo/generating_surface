@@ -30,9 +30,16 @@
         {
             canvas = new PictureBox();
             panel1 = new Panel();
-            noFocusTrackBar3 = new NoFocusTrackBar();
-            noFocusTrackBar2 = new NoFocusTrackBar();
-            noFocusTrackBar1 = new NoFocusTrackBar();
+            txtSunZ = new TextBox();
+            txtSunY = new TextBox();
+            txtSunX = new TextBox();
+            label10 = new Label();
+            label11 = new Label();
+            label12 = new Label();
+            label9 = new Label();
+            trackBarSunY = new NoFocusTrackBar();
+            trackBarSunZ = new NoFocusTrackBar();
+            trackBarSunX = new NoFocusTrackBar();
             trackBarM = new NoFocusTrackBar();
             txtM = new TextBox();
             label8 = new Label();
@@ -63,9 +70,9 @@
             colorDialog1 = new ColorDialog();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunY).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunZ).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKd).BeginInit();
@@ -91,9 +98,16 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(128, 128, 255);
-            panel1.Controls.Add(noFocusTrackBar3);
-            panel1.Controls.Add(noFocusTrackBar2);
-            panel1.Controls.Add(noFocusTrackBar1);
+            panel1.Controls.Add(txtSunZ);
+            panel1.Controls.Add(txtSunY);
+            panel1.Controls.Add(txtSunX);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(label11);
+            panel1.Controls.Add(label12);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(trackBarSunY);
+            panel1.Controls.Add(trackBarSunZ);
+            panel1.Controls.Add(trackBarSunX);
             panel1.Controls.Add(trackBarM);
             panel1.Controls.Add(txtM);
             panel1.Controls.Add(label8);
@@ -124,44 +138,102 @@
             panel1.Dock = DockStyle.Right;
             panel1.Location = new Point(633, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(264, 678);
+            panel1.Size = new Size(264, 795);
             panel1.TabIndex = 1;
             // 
-            // noFocusTrackBar3
+            // txtSunZ
             // 
-            noFocusTrackBar3.Location = new Point(10, 621);
-            noFocusTrackBar3.Maximum = 1000;
-            noFocusTrackBar3.Minimum = 1;
-            noFocusTrackBar3.Name = "noFocusTrackBar3";
-            noFocusTrackBar3.Size = new Size(104, 45);
-            noFocusTrackBar3.TabIndex = 93;
-            noFocusTrackBar3.TickStyle = TickStyle.None;
-            noFocusTrackBar3.Value = 500;
-            noFocusTrackBar3.Scroll += noFocusTrackBar3_Scroll;
+            txtSunZ.Enabled = false;
+            txtSunZ.Location = new Point(163, 715);
+            txtSunZ.Name = "txtSunZ";
+            txtSunZ.Size = new Size(39, 23);
+            txtSunZ.TabIndex = 100;
             // 
-            // noFocusTrackBar2
+            // txtSunY
             // 
-            noFocusTrackBar2.Location = new Point(133, 621);
-            noFocusTrackBar2.Maximum = 1000;
-            noFocusTrackBar2.Minimum = 1;
-            noFocusTrackBar2.Name = "noFocusTrackBar2";
-            noFocusTrackBar2.Size = new Size(104, 45);
-            noFocusTrackBar2.TabIndex = 92;
-            noFocusTrackBar2.TickStyle = TickStyle.None;
-            noFocusTrackBar2.Value = 500;
-            noFocusTrackBar2.Scroll += noFocusTrackBar2_Scroll;
+            txtSunY.Enabled = false;
+            txtSunY.Location = new Point(163, 674);
+            txtSunY.Name = "txtSunY";
+            txtSunY.Size = new Size(39, 23);
+            txtSunY.TabIndex = 99;
             // 
-            // noFocusTrackBar1
+            // txtSunX
             // 
-            noFocusTrackBar1.Location = new Point(61, 585);
-            noFocusTrackBar1.Maximum = 1000;
-            noFocusTrackBar1.Minimum = 1;
-            noFocusTrackBar1.Name = "noFocusTrackBar1";
-            noFocusTrackBar1.Size = new Size(104, 45);
-            noFocusTrackBar1.TabIndex = 91;
-            noFocusTrackBar1.TickStyle = TickStyle.None;
-            noFocusTrackBar1.Value = 500;
-            noFocusTrackBar1.Scroll += noFocusTrackBar1_Scroll;
+            txtSunX.Enabled = false;
+            txtSunX.Location = new Point(163, 634);
+            txtSunX.Name = "txtSunX";
+            txtSunX.Size = new Size(39, 23);
+            txtSunX.TabIndex = 98;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(23, 723);
+            label10.Name = "label10";
+            label10.Size = new Size(12, 15);
+            label10.TabIndex = 97;
+            label10.Text = "z";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(23, 675);
+            label11.Name = "label11";
+            label11.Size = new Size(13, 15);
+            label11.TabIndex = 96;
+            label11.Text = "y";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(23, 635);
+            label12.Name = "label12";
+            label12.Size = new Size(13, 15);
+            label12.TabIndex = 95;
+            label12.Text = "x";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            label9.Location = new Point(23, 581);
+            label9.Name = "label9";
+            label9.Size = new Size(86, 32);
+            label9.TabIndex = 94;
+            label9.Text = "Słońce";
+            // 
+            // trackBarSunY
+            // 
+            trackBarSunY.Location = new Point(53, 675);
+            trackBarSunY.Maximum = 500;
+            trackBarSunY.Minimum = -500;
+            trackBarSunY.Name = "trackBarSunY";
+            trackBarSunY.Size = new Size(104, 45);
+            trackBarSunY.TabIndex = 93;
+            trackBarSunY.TickStyle = TickStyle.None;
+            trackBarSunY.Scroll += trackBarSunY_Scroll;
+            // 
+            // trackBarSunZ
+            // 
+            trackBarSunZ.Location = new Point(53, 723);
+            trackBarSunZ.Maximum = 500;
+            trackBarSunZ.Minimum = -500;
+            trackBarSunZ.Name = "trackBarSunZ";
+            trackBarSunZ.Size = new Size(104, 45);
+            trackBarSunZ.TabIndex = 92;
+            trackBarSunZ.TickStyle = TickStyle.None;
+            trackBarSunZ.Scroll += trackBarSunZ_Scroll;
+            // 
+            // trackBarSunX
+            // 
+            trackBarSunX.Location = new Point(53, 635);
+            trackBarSunX.Maximum = 500;
+            trackBarSunX.Minimum = -500;
+            trackBarSunX.Name = "trackBarSunX";
+            trackBarSunX.Size = new Size(104, 45);
+            trackBarSunX.TabIndex = 91;
+            trackBarSunX.TickStyle = TickStyle.None;
+            trackBarSunX.Scroll += trackBarSunX_Scroll;
             // 
             // trackBarM
             // 
@@ -433,7 +505,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(897, 678);
+            ClientSize = new Size(897, 795);
             Controls.Add(panel1);
             Controls.Add(canvas);
             Name = "mainForm";
@@ -441,9 +513,9 @@
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)noFocusTrackBar1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunY).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunZ).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSunX).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarKd).EndInit();
@@ -487,8 +559,15 @@
         private Label label6;
         private Label label5;
         private ColorDialog colorDialog1;
-        private NoFocusTrackBar noFocusTrackBar1;
-        private NoFocusTrackBar noFocusTrackBar3;
-        private NoFocusTrackBar noFocusTrackBar2;
+        private NoFocusTrackBar trackBarSunX;
+        private NoFocusTrackBar trackBarSunY;
+        private NoFocusTrackBar trackBarSunZ;
+        private Label label10;
+        private Label label11;
+        private Label label12;
+        private Label label9;
+        private TextBox txtSunZ;
+        private TextBox txtSunY;
+        private TextBox txtSunX;
     }
 }

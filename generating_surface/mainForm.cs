@@ -17,6 +17,7 @@ namespace generating_surface
         const int canvasBottom = -canvasHeight / 2;
 
         BezierSurface surface;
+        Vector3 sunPosition = new Vector3(0, 0, 0);
 
         public mainForm()
         {
@@ -37,7 +38,6 @@ namespace generating_surface
             if (!surface.ReadPointsFromFile(surfaceFile))
             {
                 MessageBox.Show("B³¹d wczytywania pliku");
-                return;
             }
         }
 
@@ -67,9 +67,8 @@ namespace generating_surface
             PaintAxis(g);
             PaintMainGrid(g);
             PaintLittleGrid(g);
+            PaintSun(g);
 
-            Vector3 sun = GetSunPossition();
-            g.FillRectangle(Brushes.Yellow, sun.X, sun.Y, 10, 10);
         }
 
         private void PaintAxis(Graphics g)
@@ -79,6 +78,24 @@ namespace generating_surface
             g.DrawLine(Pens.Black, canvasLeft, 0, canvasRight, 0);
         }
 
+        private void PaintSun(Graphics g)
+        {
+            // interpolate color based on z position of the sun
+            float zPosition = sunPosition.Z;
+            zPosition = Math.Clamp(zPosition, -500, 500);
+
+            float t = (zPosition + 500) / 1000f;
+
+            int r1 = 139, g1 = 0, b1 = 0;
+            int r2 = 255, g2 = 255, b2 = 0;
+
+            int r_color = (int)(r1 + (r2 - r1) * t);
+            int g_color = (int)(g1 + (g2 - g1) * t);
+            int b_color = (int)(b1 + (b2 - b1) * t);
+
+            Brush brush = new SolidBrush(Color.FromArgb(r_color, g_color, b_color));
+            g.FillRectangle(brush, sunPosition.X, sunPosition.Y, 10, 10);
+        }
         private void PaintLittleGrid(Graphics g)
         {
             if (!checkBoxLittleGrid.Checked) return;
@@ -144,7 +161,7 @@ namespace generating_surface
                 {
                     for (int j = 0; j < BezierSurface.size; j++)
                     {
-                        PutPixel(g, (int)surface.rotated_points[i,j].X, (int)surface.rotated_points[i, j].Y, Color.Black, 4);
+                        PutPixel(g, (int)surface.rotated_points[i, j].X, (int)surface.rotated_points[i, j].Y, Color.Black, 4);
                     }
                 }
             }
@@ -257,7 +274,7 @@ namespace generating_surface
 
         private Color CalculateColor(float u, float v, Vector3 pointPosition)
         {
-            Vector3 L = Vector3.Normalize(pointPosition - GetSunPossition());
+            Vector3 L = Vector3.Normalize(sunPosition-pointPosition);
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
             Vector3 R = FillingTriangle.CalculateR(N, L);
             Vector3 V = new Vector3(0, 0, 1);
@@ -279,7 +296,7 @@ namespace generating_surface
         {
             lastMousePosition = e.Location;
             mouseDrag = true;
-            sun=e.Button == MouseButtons.Right;
+            sun = e.Button == MouseButtons.Right;
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
@@ -299,11 +316,14 @@ namespace generating_surface
 
                 canvas.Invalidate();
             }
-            else if(mouseDrag)
+            else if (mouseDrag)
             {
+                int newX = e.Location.X-canvasWidth/2;
+                int newY = -(e.Location.Y-canvasHeight/2);
 
-                noFocusTrackBar1.Value = e.Location.X-canvasWidth/2+500;
-                noFocusTrackBar2.Value = -e.Location.Y+canvasHeight/2+500;
+                Vector3 newSunPosition = new Vector3(newX, newY, sunPosition.Z);
+                UpdateSunPosition(newSunPosition);
+
                 lastMousePosition = e.Location;
                 canvas.Invalidate();
             }
@@ -331,7 +351,7 @@ namespace generating_surface
             canvas.Invalidate();
         }
 
-        
+
 
         private void checkBoxLittleGrid_CheckedChanged(object sender, EventArgs e)
         {
@@ -380,29 +400,47 @@ namespace generating_surface
             canvas.Invalidate();
         }
 
-        private void noFocusTrackBar1_Scroll(object sender, EventArgs e)
+        private void UpdateSunPosition(Vector3 newSunPosition)
         {
+            sunPosition = newSunPosition;
+            txtSunX.Text = sunPosition.X.ToString();
+            txtSunY.Text = sunPosition.Y.ToString();
+            txtSunZ.Text = sunPosition.Z.ToString();
+
+            trackBarSunX.Value = (int)sunPosition.X;
+            trackBarSunY.Value = (int)sunPosition.Y;
+            trackBarSunZ.Value = (int)sunPosition.Z;
+        }
+
+
+        
+        
+
+        private void trackBarSunX_Scroll(object sender, EventArgs e)
+        {
+            int sunX = trackBarSunX.Value;
+            Vector3 pos=sunPosition;
+            pos.X = sunX;
+            UpdateSunPosition(pos);
             canvas.Invalidate();
         }
 
-        private void noFocusTrackBar3_Scroll(object sender, EventArgs e)
+        private void trackBarSunY_Scroll(object sender, EventArgs e)
         {
+            int sunY = trackBarSunY.Value;
+            Vector3 pos = sunPosition;
+            pos.Y = sunY;
+            UpdateSunPosition(pos);
             canvas.Invalidate();
         }
 
-        private void noFocusTrackBar2_Scroll(object sender, EventArgs e)
+        private void trackBarSunZ_Scroll(object sender, EventArgs e)
         {
+            int sunZ = trackBarSunZ.Value;
+            Vector3 pos = sunPosition;
+            pos.Z = sunZ;
+            UpdateSunPosition(pos);
             canvas.Invalidate();
-        }
-
-        private Vector3 GetSunPossition()
-        {
-            return new Vector3(noFocusTrackBar1.Value - 500, noFocusTrackBar2.Value - 500, noFocusTrackBar3.Value - 500);
-        }
-
-        private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
