@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="brick_normalmap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="normal_map.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

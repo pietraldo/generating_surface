@@ -17,6 +17,7 @@ namespace generating_surface
         BezierSurface surface;
         Vector3 sunPosition = new Vector3(0, 0, 0);
         Light sunLight;
+        Bitmap texture;
 
         public mainForm()
         {
@@ -37,6 +38,9 @@ namespace generating_surface
 
             // Create new surface
             ReloadSurface();
+
+            // Load texture
+            LoadTexture();
 
             Color IL = Color.White;
             Color IO = Color.White;
@@ -84,7 +88,7 @@ namespace generating_surface
 
             surface.RotatePoints();
             surface.GenerateSmallGrid();
-            surface.CalculateVectorsForPoints(sunPosition);
+            surface.CalculateVectorsForPoints(sunPosition, texture);
 
             PaintTriangleFilling(g);
             PaintAxis(g);
@@ -234,8 +238,7 @@ namespace generating_surface
 
         private void LoadTexture()
         {
-            //Bitmap texture = new Bitmap("normal_map.jpg");
-            //surface.texture = texture;
+            texture = new Bitmap("brick_normalmap.png");
         }
 
         private class Edge
