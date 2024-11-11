@@ -273,6 +273,7 @@
             trackBarKs.SmallChange = 0;
             trackBarKs.TabIndex = 87;
             trackBarKs.TickStyle = TickStyle.None;
+            trackBarKs.Value = 400;
             trackBarKs.Scroll += trackBarKs_Scroll;
             // 
             // txtKs
@@ -300,6 +301,7 @@
             trackBarKd.Size = new Size(104, 45);
             trackBarKd.TabIndex = 84;
             trackBarKd.TickStyle = TickStyle.None;
+            trackBarKd.Value = 500;
             trackBarKd.Scroll += trackBarKd_Scroll;
             // 
             // txtKd

@@ -18,6 +18,7 @@ namespace generating_surface
 
         BezierSurface surface;
         Vector3 sunPosition = new Vector3(0, 0, 0);
+        Light sunLight;
 
         public mainForm()
         {
@@ -39,6 +40,13 @@ namespace generating_surface
             {
                 MessageBox.Show("B³¹d wczytywania pliku");
             }
+
+            Color IL= Color.White;
+            Color IO = Color.White;
+            double kd = (double)trackBarKd.Value/1000;
+            double ks = (double)trackBarKs.Value/1000;
+            int m = trackBarM.Value;
+            sunLight = new Light(IL, IO, kd, ks, m);
         }
 
         public static void PutPixel(Graphics g, int x, int y, Color color, int size = 1)
@@ -107,7 +115,7 @@ namespace generating_surface
                     Vertex vertex = surface.small_grid[i, j];
                     Color color = CalculateColor(vertex.u, vertex.v, vertex.rotated_point);
 
-                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 2);
+                    PutPixel(g, (int)vertex.rotated_point.X, (int)vertex.rotated_point.Y, color, 10);
                 }
             }
 
@@ -145,8 +153,13 @@ namespace generating_surface
                     Point p2 = new Point((int)surface.small_grid[i, j + 1].rotated_point.X, (int)surface.small_grid[i, j + 1].rotated_point.Y);
                     Point p3 = new Point((int)surface.small_grid[i + 1, j].rotated_point.X, (int)surface.small_grid[i + 1, j].rotated_point.Y);
                     Point p4 = new Point((int)surface.small_grid[i + 1, j + 1].rotated_point.X, (int)surface.small_grid[i + 1, j + 1].rotated_point.Y);
-                    FillTriangle(g, p1, p2, p4, Color.Yellow, surface);
-                    FillTriangle(g, p1, p3, p4, Color.Black, surface);
+
+                    Vertex v1 = surface.small_grid[i, j];
+                    Vertex v2 = surface.small_grid[i, j + 1];
+                    Vertex v3 = surface.small_grid[i + 1, j];
+                    Vertex v4 = surface.small_grid[i + 1, j + 1];
+                    //FillTriangle(g, v1, v2, v3);
+                    //FillTriangle(g, v2, v3, v4);
                 }
             }
 
@@ -198,14 +211,16 @@ namespace generating_surface
             public int index;
         }
 
-        private void FillTriangle(Graphics g, Point p1, Point p2, Point p3, Color color, BezierSurface surface)
+        
+        private void FillTriangle(Graphics g, Vertex v1, Vertex v2, Vertex v3)
         {
+            
             // Sort points by Y coordinate in ascending order
-            Point[] points = { p1, p2, p3 };
-            Array.Sort(points, (a, b) => a.Y.CompareTo(b.Y));
+            Vertex[] points = { v1, v2, v3 };
+            Array.Sort(points, (a, b) => a.rotated_point.Y.CompareTo(b.rotated_point.Y));
 
-            int ymin = points[0].Y;
-            int ymax = points[2].Y;
+            int ymin = (int)points[0].rotated_point.Y;
+            int ymax = (int)points[2].rotated_point.Y;
             int scanLine = ymin;
 
             List<Edge> aet = new List<Edge>();
@@ -216,30 +231,30 @@ namespace generating_surface
                 {
                     int prevI = (i + 2) % 3;
                     int nextI = (i + 1) % 3;
-                    Point curr = points[i];
-                    Point prev = points[prevI];
-                    Point next = points[nextI];
+                    Vertex curr = points[i];
+                    Vertex prev = points[prevI];
+                    Vertex next = points[nextI];
 
-                    if (curr.Y == scanLine)
+                    if ((int)curr.rotated_point.Y == scanLine)
                     {
-                        if (prev.Y > curr.Y)
+                        if ((int)prev.rotated_point.Y > (int)curr.rotated_point.Y)
                         {
                             aet.Add(new Edge
                             {
-                                yMax = prev.Y,
-                                xMin = curr.X,
-                                m = (prev.Y == curr.Y) ? 0 : (float)(prev.X - curr.X) / (prev.Y - curr.Y),
+                                yMax = (int)prev.rotated_point.Y,
+                                xMin = (int)curr.rotated_point.X,
+                                m = ((int)prev.rotated_point.Y == (int)curr.rotated_point.Y) ? 0 : (float)((int)prev.rotated_point.X - (int)curr.rotated_point.X) / ((int)prev.rotated_point.Y - (int)curr.rotated_point.Y),
                                 index = i
                             });
                         }
 
-                        if (next.Y > curr.Y)
+                        if ((int)next.rotated_point.Y > (int)curr.rotated_point.Y)
                         {
                             aet.Add(new Edge
                             {
-                                yMax = next.Y,
-                                xMin = curr.X,
-                                m = (next.Y == curr.Y) ? 0 : (float)(next.X - curr.X) / (next.Y - curr.Y),
+                                yMax = (int)next.rotated_point.Y,
+                                xMin = (int)curr.rotated_point.X,
+                                m = ((int)next.rotated_point.Y == (int)curr.rotated_point.Y) ? 0 : (float)((int)next.rotated_point.X - (int)curr.rotated_point.X) / ((int)next.rotated_point.Y - (int)curr.rotated_point.Y),
                                 index = i
                             });
                         }
@@ -259,7 +274,8 @@ namespace generating_surface
                         //float u = 2;
                         //float v = 2;
                         //color = CalculateColor(u, v, surface);
-                        PutPixel(g, j, scanLine, color);
+
+                        PutPixel(g, j, scanLine, Color.AliceBlue);
                     }
                 }
 
@@ -278,14 +294,10 @@ namespace generating_surface
             Vector3 N = FillingTriangle.CalculateN(u, v, surface);
             Vector3 R = FillingTriangle.CalculateR(N, L);
             Vector3 V = new Vector3(0, 0, 1);
-            Color IL = Color.White;
-            Color IO = Color.LightBlue;
-            double kd = (double)trackBarKd.Value / 1000;
-            double ks = (double)trackBarKs.Value / 1000;
-            int m = trackBarM.Value;
+            
 
 
-            return FillingTriangle.CalculateColor(N, L, V, R, IL, IO, kd, ks, m);
+            return FillingTriangle.CalculateColor(N, L, V, R, sunLight.IL, sunLight.IO, sunLight.kd, sunLight.ks, sunLight.m);
         }
 
 
@@ -387,16 +399,19 @@ namespace generating_surface
 
         private void trackBarKd_Scroll(object sender, EventArgs e)
         {
+            sunLight.kd = (double)trackBarKd.Value / 1000;
             canvas.Invalidate();
         }
 
         private void trackBarKs_Scroll(object sender, EventArgs e)
         {
+            sunLight.ks = (double)trackBarKs.Value / 1000;
             canvas.Invalidate();
         }
 
         private void trackBarM_Scroll(object sender, EventArgs e)
         {
+            sunLight.m = trackBarM.Value;
             canvas.Invalidate();
         }
 

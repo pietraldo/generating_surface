@@ -67,6 +67,11 @@ namespace generating_surface
             }
         }
 
+        public void CalculateVectorsForColor()
+        {
+
+        }
+
         public bool ReadPointsFromFile(string file)
         {
             if (!File.Exists(file)) return false;
