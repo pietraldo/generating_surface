@@ -6,8 +6,8 @@ namespace generating_surface
 {
     public partial class mainForm : Form
     {
-        const int canvasWidth = 500;
-        const int canvasHeight = 500;
+        const int canvasWidth = 700;
+        const int canvasHeight = 700;
 
         const int canvasRight = canvasWidth / 2;
         const int canvasLeft = -canvasWidth / 2;
@@ -15,9 +15,9 @@ namespace generating_surface
         const int canvasBottom = -canvasHeight / 2;
 
         BezierSurface surface;
-        Vector3 sunPosition = new Vector3(0, 0, 0);
+        Vector3 sunPosition = new Vector3(0, 0, 100);
         Light sunLight;
-        Bitmap texture;
+        Bitmap? texture;
 
         public mainForm()
         {
@@ -34,7 +34,8 @@ namespace generating_surface
             txtAccuracy.Text = trackBarAccuracy.Value.ToString();
 
             // ComboBox
-            ReloadComboBoxItems();
+            ReloadComboBoxSurfaceItems();
+            ReloadComboBoxTextureItems();
 
             // Create new surface
             ReloadSurface();
@@ -50,12 +51,21 @@ namespace generating_surface
             sunLight = new Light(IL, IO, kd, ks, m);
         }
 
-        private void ReloadComboBoxItems()
+        private void ReloadComboBoxSurfaceItems()
         {
             cmbSurfaceFile.Items.Clear();
             DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
             cmbSurfaceFile.Items.AddRange(directoryInfo.GetFiles("*.txt").Select(file => file.Name).ToArray());
             cmbSurfaceFile.SelectedIndex = 0;
+        }
+
+        private void ReloadComboBoxTextureItems()
+        {
+            cmbTextura.Items.Clear();
+            DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
+            cmbTextura.Items.AddRange(directoryInfo.GetFiles("*.jpg").Select(file => file.Name).ToArray());
+            cmbTextura.Items.AddRange(directoryInfo.GetFiles("*.png").Select(file => file.Name).ToArray());
+            cmbTextura.SelectedIndex = 0;
         }
 
         public static void PutPixel(Graphics g, int x, int y, Color color, int size = 1)
@@ -121,7 +131,7 @@ namespace generating_surface
             int b_color = (int)(b1 + (b2 - b1) * t);
 
             Brush brush = new SolidBrush(Color.FromArgb(r_color, g_color, b_color));
-            g.FillRectangle(brush, sunPosition.X, sunPosition.Y, 10, 10);
+            g.FillEllipse(brush, sunPosition.X, sunPosition.Y, 10, 10);
         }
 
         private void PaintSunLines(Graphics g)
@@ -238,7 +248,8 @@ namespace generating_surface
 
         private void LoadTexture()
         {
-            texture = new Bitmap("brick_normalmap.png");
+            string textureFile = cmbTextura.Text;
+            texture = (checkboxTextura.Checked && textureFile!="") ? new Bitmap(textureFile) : null;
         }
 
         private class Edge
@@ -377,6 +388,7 @@ namespace generating_surface
                 float dy = e.Location.X - lastMousePosition.X;
                 float dx = e.Location.Y - lastMousePosition.Y;
 
+                
                 if (dx + trackBarAxisX.Value < trackBarAxisX.Maximum && dx + trackBarAxisX.Value > trackBarAxisX.Minimum)
                     trackBarAxisX.Value += (int)dx;
                 if (dy + trackBarAxisY.Value < trackBarAxisY.Maximum && dy + trackBarAxisY.Value > trackBarAxisY.Minimum)
@@ -547,17 +559,17 @@ namespace generating_surface
             double r = Math.Sqrt(sunPosition.X * sunPosition.X + sunPosition.Y * sunPosition.Y);
             double alfa = Math.Atan2(sunPosition.Y, sunPosition.X);
 
-            r += sunMoveDirection * 2;
-            if (r > 200)
-            {
-                r = 200;
-                sunMoveDirection = -1;
-            }
-            else if (r < 0)
-            {
-                r = 0;
-                sunMoveDirection = 1;
-            }
+            //r += sunMoveDirection * 2;
+            //if (r > 200)
+            //{
+            //    r = 200;
+            //    sunMoveDirection = -1;
+            //}
+            //else if (r < 0)
+            //{
+            //    r = 0;
+            //    sunMoveDirection = 1;
+            //}
 
             double newAlfa = alfa + 0.1;
 
@@ -595,7 +607,7 @@ namespace generating_surface
 
         private void cmbSurfaceFile_Click(object sender, EventArgs e)
         {
-            ReloadComboBoxItems();
+            ReloadComboBoxSurfaceItems();
         }
 
         private void cmbSurfaceFile_SelectedIndexChanged(object sender, EventArgs e)
@@ -603,5 +615,16 @@ namespace generating_surface
             ReloadSurface();
         }
 
+        private void checkboxTextura_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadTexture();
+            canvas.Invalidate();
+        }
+
+        private void cmbTextura_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadTexture();
+            canvas.Invalidate();
+        }
     }
 }

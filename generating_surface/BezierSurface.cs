@@ -67,25 +67,30 @@ namespace generating_surface
             }
         }
 
-        public void CalculateVectorsForPoints(Vector3 sunPosition, Bitmap texture)
+        public void CalculateVectorsForPoints(Vector3 sunPosition, Bitmap? texture)
         {
             for (int i = 0; i < small_grid_size; i++)
             {
                 for (int j = 0; j < small_grid_size; j++)
-                {
-                    small_grid[i,j].L = Vector3.Normalize(sunPosition - small_grid[i,j].rotated_point);
+                {                    
+                    if (texture != null)
+                    {
+                        int width = (int)(small_grid[i, j].u * texture.Width);
+                        int height = (int)(small_grid[i, j].v * texture.Height);
+                        width = Math.Min(width, texture.Width - 1);
+                        height = Math.Min(height, texture.Height - 1);
+                        width = Math.Max(width, 1);
+                        height = Math.Max(height, 1);
+                        Color color = texture.GetPixel(width, height);
+                        Vector3 vector3 = new Vector3(color.R - 128, color.G - 128, color.B - 128);
+                        small_grid[i, j].N = Vector3.Normalize(vector3);
+                    }
+                    else
+                    {
+                        small_grid[i, j].N = FillingTriangle.CalculateN(small_grid[i, j].u, small_grid[i, j].v, this);
+                    }
 
-                    int width = (int)(small_grid[i, j].u * texture.Width);
-                    int height = (int)(small_grid[i, j].v * texture.Height);
-                    width = Math.Min(width, texture.Width - 1);
-                    height = Math.Min(height, texture.Height - 1);
-                    width = Math.Max(width, 1);
-                    height = Math.Max(height, 1);
-                    Color color = texture.GetPixel(width, height);
-                    Vector3 vector3 = new Vector3(color.R-128, color.G-128, color.B-128);
-
-                    small_grid[i, j].N = Vector3.Normalize(vector3);
-                    //small_grid[i, j].N = FillingTriangle.CalculateN(small_grid[i, j].u, small_grid[i, j].v, this);
+                    small_grid[i, j].L = Vector3.Normalize(sunPosition - small_grid[i, j].rotated_point);
                     small_grid[i, j].V = new Vector3(0, 0, 1);
                     small_grid[i, j].R = FillingTriangle.CalculateR(small_grid[i, j].N, small_grid[i, j].L);
                 }
