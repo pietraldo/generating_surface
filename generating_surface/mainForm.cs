@@ -6,8 +6,8 @@ namespace generating_surface
 {
     public partial class mainForm : Form
     {
-        const int canvasWidth = 700;
-        const int canvasHeight = 700;
+        const int canvasWidth = 500;
+        const int canvasHeight = 500;
 
         const int canvasRight = canvasWidth / 2;
         const int canvasLeft = -canvasWidth / 2;
@@ -91,9 +91,12 @@ namespace generating_surface
             g.TranslateTransform((float)canvas.Width / 2, -(float)canvas.Height / 2);
 
 
-            surface.degreeX = trackBarAxisX.Value;
-            surface.degreeY = trackBarAxisY.Value;
-            surface.degreeZ = trackBarAxisZ.Value;
+            //surface.degreeX = trackBarAxisX.Value;
+            //surface.degreeY = trackBarAxisY.Value;
+            //surface.degreeZ = trackBarAxisZ.Value;
+            surface.degreeX=float.Parse(txtAxisXValue.Text);
+            surface.degreeY = float.Parse(txtAxisYValue.Text);
+            surface.degreeZ = float.Parse(txtAxisZValue.Text);
             surface.small_grid_size = trackBarAccuracy.Value;
 
             surface.RotatePoints();
@@ -388,12 +391,9 @@ namespace generating_surface
                 float dy = e.Location.X - lastMousePosition.X;
                 float dx = e.Location.Y - lastMousePosition.Y;
 
-                
-                if (dx + trackBarAxisX.Value < trackBarAxisX.Maximum && dx + trackBarAxisX.Value > trackBarAxisX.Minimum)
-                    trackBarAxisX.Value += (int)dx;
-                if (dy + trackBarAxisY.Value < trackBarAxisY.Maximum && dy + trackBarAxisY.Value > trackBarAxisY.Minimum)
-                    trackBarAxisY.Value += (int)dy;
-
+                txtAxisXValue.Text = (float.Parse(txtAxisXValue.Text) + (int)dx).ToString();
+                txtAxisYValue.Text = (float.Parse(txtAxisYValue.Text) + (int)dy).ToString();
+               
 
                 lastMousePosition = e.Location;
 
