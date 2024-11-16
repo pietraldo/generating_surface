@@ -100,9 +100,9 @@ namespace generating_surface
             double cosNL = CalculateCos(N, L);
             double cosVR = CalculateCos(V, R);
 
-            double colorR = kd * ((double)IL.R/255) * (((double)IO.R/255) * cosNL + ks * ((double)IL.R / 255) * ((double)IO.R/255) * Math.Pow(cosVR, m));
-            double colorG = kd * ((double)IL.G / 255) * (((double)IO.G / 255) * cosNL + ks * ((double)IL.G / 255) * ((double)IO.G / 255) * Math.Pow(cosVR, m));
-            double colorB = kd * ((double)IL.B / 255) * (((double)IO.B / 255) * cosNL + ks * ((double)IL.B / 255) * ((double)IO.B / 255) * Math.Pow(cosVR, m));
+            double colorR = kd * ((double)IL.R/255) * ((double)IO.R/255) * cosNL + ks * ((double)IL.R / 255) * ((double)IO.R/255) * Math.Pow(cosVR, m);
+            double colorG = kd * ((double)IL.G / 255) * ((double)IO.G / 255) * cosNL + ks * ((double)IL.G / 255) * ((double)IO.G / 255) * Math.Pow(cosVR, m);
+            double colorB = kd * ((double)IL.B / 255) * ((double)IO.B / 255) * cosNL + ks * ((double)IL.B / 255) * ((double)IO.B / 255) * Math.Pow(cosVR, m);
 
             int r = (int)(colorR * 255);
             int g = (int)(colorG * 255);

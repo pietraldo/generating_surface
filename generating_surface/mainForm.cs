@@ -328,10 +328,19 @@ namespace generating_surface
 
                         float[] bar = CalculateBarecentric(v1, v2, v3, x, y);
 
+                        float z = bar[0] * v1.rotated_point.Z + bar[1] * v2.rotated_point.Z + bar[2] * v3.rotated_point.Z;
+                        Vector3 pointPosition = new Vector3(x,y,z);
+                        float u = bar[0] * v1.u + bar[1] * v2.u + bar[2] * v3.u;
+                        float v = bar[0] * v1.v + bar[1] * v2.v + bar[2] * v3.v;
+
+
                         Vector3 N = bar[0] * v1.N + bar[1] * v2.N + bar[2] * v3.N;
-                        Vector3 L = bar[0] * v1.L + bar[1] * v2.L + bar[2] * v3.L;
-                        Vector3 V = bar[0] * v1.V + bar[1] * v2.V + bar[2] * v3.V;
-                        Vector3 R = bar[0] * v1.R + bar[1] * v2.R + bar[2] * v3.R;
+                        Vector3 L = Vector3.Normalize(sunPosition - pointPosition);
+                        Vector3 V = new Vector3(0, 0, 1);
+                        Vector3 R = FillingTriangle.CalculateR(N, L);
+                        //Vector3 L = bar[0] * v1.L + bar[1] * v2.L + bar[2] * v3.L;
+                        //Vector3 V = bar[0] * v1.V + bar[1] * v2.V + bar[2] * v3.V;
+                        //Vector3 R = bar[0] * v1.R + bar[1] * v2.R + bar[2] * v3.R;
 
                         Color color = FillingTriangle.CalculateColor(N, L, V, R, sunLight.IL, sunLight.IO, sunLight.kd, sunLight.ks, sunLight.m);
 
