@@ -68,14 +68,15 @@ namespace generating_surface
 
         public static Vector3 CalculateN(float u, float v, BezierSurface surface)
         {
-            Vector3 Pu = CalculatePu(u, v, surface);
-            Vector3 Pv = CalculatePv(u, v, surface);
+            //Vector3 Pu = CalculatePu(u, v, surface);
+            //Vector3 Pv = CalculatePv(u, v, surface);
 
-            Vector3 N = new Vector3();
-            N.X = Pu.Y * Pv.Z - Pu.Z * Pv.Y;
-            N.Y = Pu.Z * Pv.X - Pu.X * Pv.Z;
-            N.Z = Pu.X * Pv.Y - Pu.Y * Pv.X;
-            return Vector3.Normalize(N);
+            //Vector3 N = new Vector3();
+            //N.X = Pu.Y * Pv.Z - Pu.Z * Pv.Y;
+            //N.Y = Pu.Z * Pv.X - Pu.X * Pv.Z;
+            //N.Z = Pu.X * Pv.Y - Pu.Y * Pv.X;
+            //return Vector3.Normalize(N);
+            return MapaWektorow.NormalVector(u*20-10, v*20-10);
         }
 
         public static Vector3 CalculateR(Vector3 N, Vector3 L)
